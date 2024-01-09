@@ -1,7 +1,7 @@
 settings {
     "main": {
-        "description": "Let this old fox guide you to learning \r\nabout various Widowmaker techniques\r\nand putting them into practice!\r\nDifficulty: Intermediate\r \nBy Felicity(#11283) (Code: F6669)\r\n\r\n\rMore Widow Parkour Maps: https://bit.ly/widowparkour\nBased on HiyaXD's modded version (J1ANR)\r\nof Peace's Mercy Parkour Editor (T6QQT)",
-        "modeName": "Widow Parkour, Gibraltar by Feli"
+        "description": "You complained... about the bunnyhops... \r\nthe easiest movement mechanic in the game...\nand about 100% consistent glitch techniques...\nI will give you something to complain about...\n\rDifficulty: scry some more\nBy Felicity(#11283) (Code: ?????)\r\n\r\n\rMore Widow Parkour Maps: https://bit.ly/widowparkour\nBased on HiyaXD's modded version (J1ANR)\r\nof Peace's Mercy Parkour Editor (T6QQT)",
+        "modeName": "Widow Parkour, Volskaya (Unfair)"
     },
     "lobby": {
         "allowPlayersInQueue": true,
@@ -56,13 +56,6 @@ settings {
                 "enableSpawningWithUlt": true
             }
         }
-    },
-    "workshop": {
-        "Edit Mode편집 모드": false,
-        "Land on arrival point도착은 착지가 필요하다": true,
-        "New level crouch새 관문 앉기": true,
-        "New level radius새 관문 반경": 1.6,
-        "Skip  Back only after clearing the level need to turn on the Skip  Back": false
     }
 }
 
@@ -2309,7 +2302,7 @@ def DisplayCurrentAbilityMsgs():
     if eventPlayer.checkpointA[5] or not eventPlayer.checkpointB:
         return
     if len(eventPlayer.currentOrb) > 0:
-        smallMessage(eventPlayer, Config[20] if Config[20] else "This level has {0} orb to get".format(len(eventPlayer.currentOrb)))
+        smallMessage(eventPlayer, Config[20] if Config[20] else "This level has {0} orb(s) to get".format(len(eventPlayer.currentOrb)))
     if not eventPlayer.checkpointA[3][0]:
         smallMessage(eventPlayer, Config[19])
     else:
@@ -2586,36 +2579,15 @@ rule "changing hero (hit need healing comms button) - ty to felicity for the cod
 
 
 rule "Small message text (Originally from peace's mercy parkour editor: T6QQT)":
-    SmallMessages[1] = "You can also walk off a ledge without jumping and get a bhop bounce, too."
-    SmallMessages[11] = "No one said it would be easy, though."
-    SmallMessages[20] = "If you're having trouble, lower your grapple sensitivity to 50."
-    SmallMessages[39] = "Bonk!"
+    SmallMessages[0] = "Bonk!"
 
 
 rule "Put the data here (Originally from peace's mercy parkour editor: T6QQT)":
     Checkpoint = [[vect(-53.193, -4.161, 77.688), 1.6, true, [vect(-101.85, 2.02, 42.091), false, true], false, false, [], [], []]]
 
+
 rule "HUD guidance text (Originally from peace's mercy parkour editor: T6QQT)":
-    Tips[0] = "Many explanations may not be relevant in the level they\r\n are shown in. However, they will certainly be usable in many!\r\n{0}".format("This map was intended for use with 45 grapple sensitivity.")
-    Tips[1] = "Bunnyhopping is very useful and sometimes necessary.\r\nGrapple up without first jumping, and hold jump as you land."
-    Tips[2] = "It's usually a bad idea to grapple or fly too far up when it's not necessary.\r\nGravity is our friend and our foe. Thanks Bob!"
-    Tips[3] = "You always want to take a shot as close to the apex of your\r\ngrapple trajectory as possible, where your aim is most stable."
-    Tips[4] = "The fox is not particularly strong or fierce.\r\nBut the cleverness of the fox can overcome\r\nthe careless savagery of the wolf."
-    Tips[6] = "Widowmaker's falloff damage starts at 40 meters and does minimum at 60. \r\nBe careful of where and when you take your shot."
-    Tips[7] = "If you grapple a flat surface that's directly beside you, very close,\r\nyou'll often launch yourself {0}".format("into the air. Weee! Sometimes you need to tap jump right after, too.")
-    Tips[8] = "Once more, but this time shoot the target, too!"
-    Tips[9] = "There are usually multiple ways to complete each level.\r\nSome are faster or more consistent than others!"
-    Tips[11] = "If you walk off a ledge without jumping,\r\nyou can still bhop so that you have time to\r\ncharge your shot. It's possible here!"
-    Tips[12] = "Although counterintuitive, you conserve\r\nmore momentum by jumping and grappling closer to\nyourself, not further away, an{0}".format("d can fly further.")
-    Tips[15] = "If you grapple at an angle through a doorway,\r\nit can boost you into the air."
-    Tips[18] = "Time it so you jump just before the FOV changes as you aim down sights,\r\nand you can get enough charge to kill without usi{0}".format("ng the grapple.")
-    Tips[20] = "If you grapple on a flat surface below a ledge, it will flip you\r\nup on top of it, and you can still bhop after."
-    Tips[21] = "Grapple the same way as before, except this time hold your forward key (such as W). "
-    Tips[22] = "This is one of the rare maps where the ceiling\r\ncan actually be useful as a tool or escape.\r\nShoot the target before getti{0}".format("ng the orb.")
-    Tips[27] = "Between falloff, the grapple, and poor terrain hitboxes,\r\nWidowmaker isn't always very fun!"
-    Tips[28] = "This flank was useful, once upon a time."
-    Tips[30] = "Depending on the angle you grapple at, you can get a soft bhop or a hard bhop.\r\nSoft ones are easier to be accurate with."
-    Tips[32] = "Care for a little aim training?"
-    Tips[44] = "There are those who hunt and those who are hunted.\r\nWe are always the hunters;\r never the hunted.\nChasseurs toujours!"
+    Tips[0] = ""
+    Tips[1] = ""
 
 
