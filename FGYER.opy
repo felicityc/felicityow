@@ -111,8 +111,8 @@ subroutine _destroyTOPHUD 5
 
 rule "Workshop Settings":
     WS_winScore = createWorkshopSetting(int[-3:200], "Game Settings", "Kills to Win", 50, 0)
-    WS_all[1] = createWorkshopSetting(bool, "Game Settings", "Endless", false, 0)
-    dmgfalloff = createWorkshopSetting(bool, "Game Settings", "No Damage Falloff", true, 0)
+    WS_all[1] = createWorkshopSetting(bool, "Game Settings", "Endless", false, 1)
+    dmgfalloff = createWorkshopSetting(bool, "Game Settings", "No Damage Falloff", true, 2)
 
 
 rule "time counter":
@@ -446,16 +446,12 @@ def _destroyHUD():
     
     destroyHudText(eventPlayer.textIDArray[0])
     wait(waitTimeHUD)
-    #destroyHudText(eventPlayer.textIDArray[1])
-    #wait(waitTimeHUD)
     destroyHudText(eventPlayer.textIDArray[2])
     wait(waitTimeHUD)
     destroyHudText(eventPlayer.textIDArray[3])
     wait(waitTimeHUD)
     destroyHudText(eventPlayer.textIDArray[4])
     wait(waitTimeHUD)
-    #destroyHudText(eventPlayer.textIDArray[5])
-    #wait(waitTimeHUD)
     destroyHudText(eventPlayer.textIDArray[6])
     wait(waitTimeHUD)
     destroyHudText(eventPlayer.textIDArray[7])
@@ -464,8 +460,6 @@ def _destroyHUD():
     wait(waitTimeHUD)
     destroyHudText(eventPlayer.textIDArray[10])
     wait(waitTimeHUD)
-    #destroyHudText(eventPlayer.textIDArray[11])
-    #wait(waitTimeHUD)
     destroyInWorldText(eventPlayer.textIDArray[12])
     wait(waitTimeHUD)
     destroyInWorldText(eventPlayer.textIDArray[13])
@@ -490,6 +484,7 @@ rule "Winner early restart function":
     
     restartMatch()
 
+/*
 rule "No damage falloff (credit to BT4ND and Stack)":
     @Event playerDealtDamage
     @Hero widowmaker
@@ -501,6 +496,4 @@ rule "No damage falloff (credit to BT4ND and Stack)":
             damage(victim, eventPlayer, eventDamage * ((eventPlayer.S - 40) / 20 if 0.5 * eventPlayer.S < 60 else 1))
     eventPlayer.U += 1
     Sub0()
-    
-    
-    
+*/  
