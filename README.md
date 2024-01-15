@@ -1,8 +1,6 @@
 # felicityow
-opy code dumpster
+opy code trashcan
 
-# silly way to practice but non-destructive right?
+just storing the clean or in progress edits for various codes i want close by and to ref
 
-just storing the clean or in progress edits for various codes i am working on. it is probably a bad way to get started going further but at least it has been engaging and has immediate feedback that's meaningful to me
-
-# meh
+# ;3

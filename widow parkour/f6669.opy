@@ -1,71 +1,3 @@
-settings {
-    "main": {
-        "description": "Let this old fox guide you to learning \r\nabout various Widowmaker techniques\r\nand putting them into practice!\r\nDifficulty: Intermediate\r \nBy Felicity(#11283) (Code: F6669)\r\n\r\n\rMore Widow Parkour Maps: https://bit.ly/widowparkour\nBased on HiyaXD's modded version (J1ANR)\r\nof Peace's Mercy Parkour Editor (T6QQT)",
-        "modeName": "Widow Parkour, Gibraltar by Feli"
-    },
-    "lobby": {
-        "allowPlayersInQueue": true,
-        "mapRotation": "paused",
-        "enableMatchVoiceChat": true,
-        "spectatorSlots": 6,
-        "team1Slots": 6,
-        "team2Slots": 0,
-        "returnToLobby": "never",
-        "swapTeamsAfterMatch": false
-    },
-    "gamemodes": {
-        "skirmish": {
-            "enabledMaps": [
-                {
-                    "watchpointGibraltar": [
-                        "evening"
-                    ]
-                }
-            ]
-        },
-        "tdm": {
-            "enabledMaps": [],
-            "gameLengthInMn": 15,
-            "scoreToWin": 200,
-            "enableSelfInitiatedRespawn": false
-        },
-        "general": {
-            "enableHeroSwitching": false,
-            "enableEnemyHealthBars": false,
-            "gamemodeStartTrigger": "immediately",
-            "heroLimit": "off",
-            "enableKillCam": false,
-            "enableKillFeed": false,
-            "spawnHealthPacks": "disabled"
-        }
-    },
-    "heroes": {
-        "allTeams": {
-            "mei": {
-                "enableAbility2": false
-            },
-            "widowmaker": {
-                "enableAbility2": false
-            },
-            "enabledHeroes": [
-                "widowmaker"
-            ],
-            "general": {
-                "abilityCooldown%": 0,
-                "enableInfiniteAmmo": true,
-                "enableSpawningWithUlt": true
-            }
-        }
-    },
-    "workshop": {
-        "Edit Mode편집 모드": false,
-        "Land on arrival point도착은 착지가 필요하다": true,
-        "New level crouch새 관문 앉기": true,
-        "New level radius새 관문 반경": 1.6,
-        "Skip  Back only after clearing the level need to turn on the Skip  Back": false
-    }
-}
-
 #Global variables
 
 globalvar EditMode 0
@@ -229,10 +161,6 @@ subroutine KillOrResurrectBot 28
 
 #Activated extensions
 
-#!extension buffStatusEffects
-#!extension explosionSounds
-#!extension playMoreEffects
-#!extension spawnMoreDummyBots
 #!extension explosionSounds
 #!extension explosionSounds
 #!extension explosionSounds
@@ -282,6 +210,7 @@ rule "Player title (Originally from peace's mercy parkour editor: T6QQT)":
     Vips[len(Vips)] = ["C10H15N", "{0}".format(iconString(Icon.QUESTION_MARK)), Color.BLACK]
     Vips[len(Vips)] = ["Kephrii", "{0}Critscan{0}".format(iconString(Icon.HEART)), Color.VIOLET]
     Vips[len(Vips)] = ["Critscan", "{0}Kephrii".format(heroIcon(Hero.WIDOWMAKER)), Color.RED]
+    Vips[len(Vips)] = ["AstroDragon", "Astro{0}Dragon".format(abilityIconString(Hero.HANZO, Button.ULTIMATE)), rgba(120, 15, 0, 230)]
 
 
 rule "Personalized Configuration (Originally from peace's mercy parkour editor: T6QQT)":
@@ -340,7 +269,7 @@ rule "Personalized Configuration (Originally from peace's mercy parkour editor: 
     #Today`s Top {number}
     Config[24] = "This Instance's Fastest Times"
     #Top5 text color
-    Config[25] = rgba(248, 200, 220, 170)
+    Config[25] = rgba(145, 20, 20, 200)
     #Other winner text
     Config[26] = "Honorable Mentions"
     #Other winner text color
@@ -380,7 +309,7 @@ rule "Personalized Configuration (Originally from peace's mercy parkour editor: 
     #Bot teleport position effect color(Refresh, Need Resurrect)
     Config[50] = Color.RED
     #Bot default position
-    Config[60] = vect(-999, -999, -999)
+    Config[60] = vect(0, -999, 0)
     #Dome personalization configuration: [0] color; [1] postion; [2] radius
     Config[61] = [Color.VIOLET, (nearestWalkablePosition(vect(500, -500, 500)) + nearestWalkablePosition(vect(-500, -500, -500))) / 2, 10000]
     #Six-man star personalized configuration: [0] color; [1] postion; [2] radius
@@ -2174,11 +2103,7 @@ def CreateGlobalHUD():
         hudSubheader(getAllPlayers(), "Elapsed time {0} minutes {1} seconds".format(floor(getTotalTimeElapsed() / 60), floor(getTotalTimeElapsed() % 60)), HudPosition.TOP, 0, rgba(248, 200, 220, 170), HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
     createEffect(localPlayer if localPlayer.bhop else null, Effect.ANA_NANO_BOOSTED, null, localPlayer, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     hudSubtext(getAllPlayers(), "Widow Parkour {0} by {1}\nCode: {2}\nbased on HiyaXD's mod [J1ANR]\nof Peace's Mercy editor [T6QQT]".format(getCurrentMap(), CreatorAndCode[0] if CreatorAndCode[0] else "Anonymous", CreatorAndCode[1] if CreatorAndCode[1] else "Not yet"), HudPosition.LEFT, -999, Config[12], HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-    hudSubtext(getAllPlayers(), "Youtube Guide: {0}\r\nMore Widow Parkour Maps: {1}\r\nDiscord: {2}".format("https://bit.ly/f6669guide", "https://bit.ly/widowparkour", "Not yet!"), HudPosition.LEFT, -998, Config[12], HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-    hudSubtext(getAllPlayers(), " ", HudPosition.LEFT, -997, null, HudReeval.VISIBILITY, SpecVisibility.DEFAULT)
-    hudSubtext(getAllPlayers(), " ", HudPosition.RIGHT, 2, null, HudReeval.VISIBILITY, SpecVisibility.DEFAULT)
-    hudText([player for player in getAllPlayers() if not EditMode and not player.finished], null, " \n　\n　", " ", HudPosition.RIGHT, 3, null, null, null, HudReeval.VISIBILITY, SpecVisibility.DEFAULT)
-    hudSubtext(getAllPlayers(), " ", HudPosition.RIGHT, 10, null, HudReeval.VISIBILITY, SpecVisibility.DEFAULT)
+    hudSubtext(getAllPlayers(), "Youtube Guide: {0}\r\nMore Widow Parkour Maps: {1}\r\nDiscord: {2}".format("https://bit.ly/f6669guide", "https://bit.ly/widowparkour", "discord.gg/yfybAmM7HA"), HudPosition.LEFT, -999, Config[12], HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
     hudSubtext(getAllPlayers(), "{0} Double click ({1}) Show or hide controls".format(abilityIconString(Hero.TORBJORN, Button.ABILITY_2), buttonString(Button.INTERACT)), HudPosition.RIGHT, 98, rgba(220, 220, 220, 200), HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
     hudText(ShowHotKeyPlayers, null, "－－－－－－－－－－－－－－－－－－－－{0}{1}".format("－－－－" if "{0}".format(Hero.MERCY) == "Mercy" else (("－－－－－" if strLen(buttonString(Button.INTERACT)) > 5 else "－－－") if strLen(buttonString(Button.INTERACT)) > 3 else "－－") if strLen(buttonString(Button.INTERACT)) > 1 else "", "－－－－－－－－－－－－－" if "{0}".format(Hero.MERCY) == "マーシー" else "－－－－－－－－－－" if "{0}".format(Hero.MERCY) == "慈悲" else ""), "Preview next point : {0} + {1}\n{2}".format(buttonString(Button.PRIMARY_FIRE), buttonString(Button.SECONDARY_FIRE), "Back to point : {0}{1}\n{2}".format(buttonString(Button.ULTIMATE), " / Spray Up" if EditMode else "", "Free Mode : {0} + {1}\n{2}".format(buttonString(Button.RELOAD), buttonString(Button.MELEE), "3rd Person : {0} + {1}\n{2}".format(buttonString(Button.RELOAD), buttonString(Button.JUMP), "Spectator Mode : {0} + {1}{2}".format(buttonString(Button.ULTIMATE), buttonString(Button.ABILITY_2), "" if EditMode and localPlayer == hostPlayer else "\nRestart : {0} + {1} + {2}".format(buttonString(Button.CROUCH), buttonString(Button.ABILITY_2), buttonString(Button.INTERACT))))))), HudPosition.RIGHT, 100, null, null, rgb(205, 209, 211), HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
     hudText([player for player in ShowHotKeyPlayers if player.freeMode or player.finished], null, "－－－－－－－－－－－－－－－－－－－－{0}{1}".format("－－－－" if "{0}".format(Hero.MERCY) == "Mercy" else (("－－－－－" if strLen(buttonString(Button.INTERACT)) > 5 else "－－－") if strLen(buttonString(Button.INTERACT)) > 3 else "－－") if strLen(buttonString(Button.INTERACT)) > 1 else "", "－－－－－－－－－－－－－" if "{0}".format(Hero.MERCY) == "マーシー" else "－－－－－－－－－－" if "{0}".format(Hero.MERCY) == "慈悲" else ""), ("앞으로 텔포 : Hold {0}\n{1}".format(buttonString(Button.RELOAD), "발키리 해제 : 음성 \"{0}\"\n{1}".format(l"Sorry", "임시 CP 설정 : 두 번 탭 {0}{1}".format(buttonString(Button.ABILITY_2), "" if EditMode and localPlayer == hostPlayer else "\n상대에게 텔포 : {0}{1}".format(buttonString(Button.INTERACT), "\n상대 레벨로 이동 : {0} + {1}".format(buttonString(Button.INTERACT), buttonString(Button.RELOAD)) if EditMode or (Cheat and (not FinishedCheat or localPlayer.bestRecord)) or localPlayer.playerTittle else ""))))) if "{0}".format(Hero.MERCY) == "메르시" else "Cancel Movement collision : Hold {0}\n{1}".format(buttonString(Button.RELOAD), "Interrupt Valkyrie : Voice Line \"Sorry\"\n{0}".format("Set Temporary cp : Double click {0}{1}".format(buttonString(Button.ABILITY_2), "" if EditMode and localPlayer == hostPlayer else "\nTo player's position : {0}{1}".format(buttonString(Button.INTERACT), "\nTo player's level : {0} + {1}".format(buttonString(Button.INTERACT), buttonString(Button.RELOAD)) if EditMode or (Cheat and (not FinishedCheat or localPlayer.bestRecord)) or localPlayer.playerTittle else "")))), HudPosition.RIGHT, 101, null, rgb(205, 209, 211), rgba(205, 209, 211, 175), HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
@@ -2188,10 +2113,8 @@ def CreateGlobalHUD():
         hudSubtext(getAllPlayers() if Top5 else null, Config[24] if Config[24] else "Today`s Top {0}".format(len(Top5)), HudPosition.LEFT, -991, Config[25], HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
         for I in range(5):
             hudText(getAllPlayers() if Top5[evalOnce(I)] else null, heroIcon(Hero.WIDOWMAKER), "{0} {1}".format(["1st", "2nd", "3rd", "4th", "5th"][evalOnce(I)], Top5[evalOnce(I)][0]), "{0} sec".format(Top5[evalOnce(I)][1]), HudPosition.LEFT, -990 + I, Top5Color[I], Top5Color[I], Top5Color[I], HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-        hudSubtext(getAllPlayers(), " ", HudPosition.LEFT, -901, null, HudReeval.VISIBILITY, SpecVisibility.DEFAULT)
         #HighLights
         hudSubtext(getAllPlayers() if any([player.bestRecord and Top5.index("{0}".format(player.playerNickname)) < 0 for player in getAllPlayers()]) else null, Config[26], HudPosition.LEFT, -900, Config[27], HudReeval.VISIBILITY, SpecVisibility.DEFAULT)
-        hudSubtext(getAllPlayers(), " ", HudPosition.LEFT, -996, null, HudReeval.VISIBILITY, SpecVisibility.DEFAULT)
     else:
         hudText(hostPlayer, null, ["", "Controls: Checkpoint", "Controls: Orb", "Controls: Sphere", "Controls: Cloud"][hostPlayer.editMode], ["", "Create Point | Interact + Primary Fire\nInsert Point | Interact + Melee{0}".format("\nSelect Point | E + Primary / Secondary Fire\nMove Point | Interact + E\nSwitch Crouch | Interact + Crouch"), "Create Orb | Interact + Primary Fire\nSelect Orb | E + Primary / Secondary Fire{0}".format("\nMove Position | Reload + Primary / Secondary Fire\nCreate Bot | Melee + Primary Fire\nDelete Bot | Melee + Secondary Fire"), "Create Sphere | Interact + Primary Fire\nSelect Sphere | E + Primary / Secondary {0}".format("Fire\nMove Position | Reload + Primary / Secondary Fire\nAdjust Radius | Jump + Primary / Secondary Fire"), "Create Cloud | Interact + Primary Fire\nSelect Cloud | E + Primary / Secondary Fire{0}".format("\nMove Position | Reload + Primary / Secondary Fire\nAdjust Level | Jump + Primary / Secondary Fire")][hostPlayer.editMode], HudPosition.LEFT, 100, null, Color.WHITE, Color.TURQUOISE, HudReeval.VISIBILITY_SORT_ORDER_STRING_AND_COLOR, SpecVisibility.DEFAULT)
         hudSubtext(hostPlayer, ["", "Set Unlimited Grapple | Interact + Ultimate\nSwitch Teleport | Interact + Jump{0}".format("\nCreate Bot | Melee + Primary Fire\nDelete Bot | Melee + Secondary Fire\nKill Bot | Interact + Reload"), "Kill Bot | Interact + Melee", "", ""][hostPlayer.editMode], HudPosition.LEFT, 101, Color.TURQUOISE, HudReeval.VISIBILITY_SORT_ORDER_STRING_AND_COLOR, SpecVisibility.DEFAULT)
@@ -2213,10 +2136,10 @@ def CreatePlayerHUDAndEffects():
     @Name "Subroutine CreatePlayerHUDAndEffects (Originally from peace's mercy parkour editor: T6QQT)"
     
     if not EditMode:
-        createInWorldText(eventPlayer if eventPlayer.checkpoint == len(Checkpoint) - 1 else null, eventPlayer.segmentTimeString, vect(175, 18, 0), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.SKY_BLUE, SpecVisibility.DEFAULT)
-        createInWorldText(eventPlayer if eventPlayer.checkpoint == len(Checkpoint) - 1 else null, eventPlayer.personalBestString, vect(200, 18.009, 0), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.BLUE, SpecVisibility.DEFAULT)
-        createInWorldText(eventPlayer if eventPlayer.checkpoint == len(Checkpoint) - 1 else null, FirstPlaceTimeString, vect(225, 18, 0), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, rgb(255, 215, 0), SpecVisibility.DEFAULT)
-        createInWorldText(eventPlayer if eventPlayer.checkpoint == len(Checkpoint) - 1 else null, eventPlayer.bestSegmentsArrayString, vect(250, 18, 0), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, rgb(150, 230, 210), SpecVisibility.DEFAULT)
+        createInWorldText(eventPlayer if eventPlayer.checkpoint == len(Checkpoint) - 1 else null, eventPlayer.segmentTimeString, vect(96, -6, -42), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.SKY_BLUE, SpecVisibility.DEFAULT)
+        createInWorldText(eventPlayer if eventPlayer.checkpoint == len(Checkpoint) - 1 else null, eventPlayer.personalBestString, vect(101, -6, -35), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.BLUE, SpecVisibility.DEFAULT)
+        createInWorldText(eventPlayer if eventPlayer.checkpoint == len(Checkpoint) - 1 else null, FirstPlaceTimeString, vect(106, -6, -28), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, rgb(255, 215, 0), SpecVisibility.DEFAULT)
+        createInWorldText(eventPlayer if eventPlayer.checkpoint == len(Checkpoint) - 1 else null, eventPlayer.bestSegmentsArrayString, vect(111, -6, -21), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, rgb(150, 230, 210), SpecVisibility.DEFAULT)
     hudSubtext(eventPlayer, ("Distance to bot: {0}\r\nCharge Needed: {1}%\r\n{2}".format(distance(eventPlayer, eventPlayer.targetBot) - 0.19, 66.67 + ((distance(eventPlayer, eventPlayer.targetBot) - 40.19) * 2.5) if distance(eventPlayer, eventPlayer.targetBot) > 40.19 else 66.67, "Last Damage: {0}".format(eventPlayer.recentDamage))) if eventPlayer.checkpointA[3][0] else "Distance to bot: N/A\nCharge Needed: N/A\nLast Damage: {0}".format(eventPlayer.recentDamage), HudPosition.RIGHT, 2, Color.GREEN if distance(eventPlayer, eventPlayer.targetBot) < 40.19 else Color.YELLOW if distance(eventPlayer, eventPlayer.targetBot) < 53.52 else Color.RED, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
     if eventPlayer.editModeCharacterResetted == 1:
         wait(0.03)
@@ -2593,7 +2516,7 @@ rule "Small message text (Originally from peace's mercy parkour editor: T6QQT)":
 
 
 rule "Put the data here (Originally from peace's mercy parkour editor: T6QQT)":
-    Checkpoint = [[vect(22.283, -6.074, -159.148), 2.5, true, [false, false, true], false, false, [[vect(22.612, 0.443, -156.491), false, false, true]], [], []], [vect(30.746, 5, -150.988), 2.5, true, [vect(36.967, 4.01, -122.859), false, true], false, false, [], [], []], [vect(28.884, -5.57, -155.947), 2.6, true, [vect(51.383, 1.04, -142.588), false, true], false, false, [], [], []], [vect(40.803, -3.696, -169.297), 2.8, true, [false, false, true], false, false, [[vect(48.173, -7.195, -166.844), vect(42.846, -4, -145.32), false, true]], [], []], [vect(47.841, -5.068, -157.388), 2.65, true, [vect(19.287, 6, -129.078), false, true], false, false, [], [], []], [vect(45.625, 1, -144.382), 2.5, true, [vect(60.71, -1.071, -108.792), false, true], false, false, [], [], []], [vect(41.366, 4.01, -127.031), 3.3, true, [vect(17.271, 6, -132.211), false, true], false, false, [], [], []], [vect(61.679, -6.17, -128.116), 3.3, true, [false, false, true], false, false, [[vect(64.506, 0.004, -128.59), false, false, true]], [], []], [vect(56.935, 1, -112.687), 3.45, true, [false, false, true], false, false, [[vect(53.981, 6.156, -113.182), vect(30.719, 7.291, -89.988), false, true]], [], []], [vect(57.797, 9.556, -117.982), 3.1, true, [vect(24.507, 4, -111.511), false, true], false, false, [], [], []], [vect(34.383, 4, -101.865), 3.15, true, [vect(18.821, -1, -110.078), false, true], false, false, [], [], []], [vect(30.973, 0, -98.05), 3.2, true, [vect(26.22, -11, -112.446), false, true], false, false, [], [], []], [vect(32.125, -11.091, -101.075), 2.6, true, [false, false, true], false, false, [], [], []], [vect(31.427, 6.075, -92.463), 1.6, true, [vect(21.668, 3, -62.852), false, true], false, false, [], [], []], [vect(30.093, 4, -85.532), 4.15, true, [vect(8.477, -2, -99.835), false, true], false, false, [], [], []], [vect(22.657, 3.001, -63.1), 2.2, true, [false, false, true], false, false, [[vect(25.405, 11.386, -56.197), vect(45.861, 6.536, -52.943), false, true]], [], []], [vect(32.314, 3, -49.766), 3, true, [vect(64.213, 6.67, -50.355), false, true], false, false, [], [], []], [vect(34.901, 6.538, -47.921), 3.1, true, [vect(81.277, 3, -33.813), false, true], false, false, [[vect(50.834, 8.075, -54.819), vect(57.642, 9.04, -31.129), false, true]], [], []], [vect(52.234, 9.776, -46.683), 2.1, true, [vect(29.187, -5.149, -57.614), false, true], false, false, [], [], []], [vect(49.882, 8.194, -43.679), 1.6, true, [vect(40.567, 3, -74.759), false, true], false, false, [], [], []], [vect(44.521, -5.151, -40.602), 2.05, true, [false, false, true], false, false, [[vect(49.324, 1.19, -37.771), false, false, true], [vect(48.277, 3.752, -38.973), false, false, true]], [], []], [vect(52.971, -3.147, -35.142), 1.6, true, [false, false, true], false, false, [[vect(47.274, 2.719, -40.081), false, false, true]], [], []], [vect(55.236, 9.926, -43.698), 2.5, true, [vect(65.064, -3.003, -16.704), false, true], false, false, [[vect(62.842, 19.07, -37.046), false, false, true]], [], []], [vect(64.41, 9.645, -34.496), 2.5, true, [false, false, true], false, false, [[vect(69.796, 16.233, -38.235), vect(64.54, -3.004, -19.724), false, true]], [], []], [vect(74.661, 2.107, -34.006), 3.2, true, [false, false, true], false, false, [], [], []], [vect(90.994, -2.995, -41.551), 2.65, true, [vect(77.22, 1.881, -10.617), false, true], false, false, [], [], []], [vect(89.349, 3, -25.413), 2.7, true, [false, false, true], false, false, [], [], []], [vect(89.743, 6, 9.659), 3.2, true, [vect(63.739, 9, 32.987), false, true], false, false, [], [], []], [vect(105.806, 11.15, 11.972), 3.65, true, [vect(90.017, 1, 25.15), false, true], false, false, [], [], []], [vect(98.576, 1, 17.098), 2.35, true, [vect(74.045, 4.074, 45.031), false, true], false, false, [], [], []], [vect(99.505, -0.941, 40.727), 2.7, true, [vect(50.565, 1, 25.999), false, true], false, false, [], [], []], [vect(82.067, 1, 57.245), 1.7, true, [false, false, true], false, false, [[vect(75.979, 4.118, 44.761), false, false, true]], [], []], [vect(73.136, -0.082, 30.793), 2.25, true, [vect(62.304, 9, 33.093), false, true], false, false, [], [], []], [vect(69.684, 9, 27.174), 2.05, true, [false, false, true], false, false, [], [], []], [vect(73.136, -0.082, 30.793), 2.3, true, [vect(54.497, 9.002, 3.483), false, true], false, false, [], [], []], [vect(69.684, 9, 27.174), 2.15, true, [false, false, true], false, false, [], [], []], [vect(73.136, -0.082, 30.793), 2.2, true, [vect(58.318, 8.354, 20.434), false, true], false, false, [], [], []], [vect(69.684, 9, 27.174), 2.1, true, [false, false, true], false, false, [], [], []], [vect(73.136, -0.082, 30.793), 1.95, true, [vect(70.575, -3.169, -13.703), false, true], false, false, [], [], []], [vect(69.684, 9, 27.174), 2, true, [false, false, true], false, false, [[vect(82.337, 18.124, 10.837), false, false, true]], [], []], [vect(82.538, 11.231, 14.719), 1.6, true, [vect(76.842, 9, 16.702), false, true], false, false, [], [[vect(80.976, 14.169, 15.348), 2], [vect(84.692, 14.953, 18.159), 2.4], [vect(77.334, 15.198, 12.161), 4.7], [vect(89.934, 15.083, 15.289), 6.8], [vect(83.733, 8.304, 8.94), 4.4]], []], [vect(79.534, 9, 18.393), 2.9, true, [false, false, true], false, false, [], [], []], [vect(58.138, 8.354, 20.653), 1.3, true, [vect(82.487, 6, 2.876), false, true], false, false, [], [], []], [vect(51.788, 9, 7.084), 2.6, true, [false, false, true], false, false, [], [], []], [vect(76.998, 1.881, -10.704), 2.35, true, [false, false, true], false, false, [], [], []], [vect(99.791, -2.122, -29.523), 3.1, true, [false, false, true], false, false, [], [], []]]
+    Checkpoint = [[vect(22.283, -6.074, -159.148), 2.5, true, [false, false, true], false, false, [[vect(22.612, 0.443, -156.491), false, false, true]], [], []], [vect(30.942, 5, -150.448), 2.5, true, [vect(36.967, 4.01, -122.859), false, true], false, false, [], [], []], [vect(28.884, -5.57, -155.947), 2.6, true, [vect(51.383, 1.04, -142.588), false, true], false, false, [], [], []], [vect(40.803, -3.696, -169.297), 2.8, true, [false, false, true], false, false, [[vect(48.173, -7.195, -166.844), vect(42.846, -4, -145.32), false, true]], [], []], [vect(47.841, -5.068, -157.388), 2.65, true, [vect(19.287, 6, -129.078), false, true], false, false, [], [], []], [vect(45.625, 1, -144.382), 2.5, true, [vect(60.71, -1.071, -108.792), false, true], false, false, [], [], []], [vect(41.366, 4.01, -127.031), 3.3, true, [vect(17.271, 6, -132.211), false, true], false, false, [], [], []], [vect(61.679, -6.17, -128.116), 3.3, true, [false, false, true], false, false, [[vect(64.506, 0.004, -128.59), false, false, true]], [], []], [vect(56.935, 1, -112.687), 3.45, true, [false, false, true], false, false, [[vect(53.981, 6.156, -113.182), vect(30.719, 7.291, -89.988), false, true]], [], []], [vect(57.797, 9.556, -117.982), 3.1, true, [vect(24.507, 4, -111.511), false, true], false, false, [], [], []], [vect(34.383, 4, -101.865), 3.15, true, [vect(18.821, -1, -110.078), false, true], false, false, [], [], []], [vect(30.973, 0, -98.05), 3.2, true, [vect(26.22, -11, -112.446), false, true], false, false, [], [], []], [vect(32.125, -11.091, -101.075), 2.6, true, [false, false, true], false, false, [], [], []], [vect(31.427, 6.075, -92.463), 1.6, true, [vect(21.668, 3, -62.852), false, true], false, false, [], [], []], [vect(30.093, 4, -85.532), 4.15, true, [vect(8.477, -2, -99.835), false, true], false, false, [], [], []], [vect(22.657, 3.001, -63.1), 2.2, true, [false, false, true], false, false, [[vect(25.405, 11.386, -56.197), vect(45.861, 6.536, -52.943), false, true]], [], []], [vect(32.314, 3, -49.766), 3, true, [vect(64.213, 6.67, -50.355), false, true], false, false, [], [], []], [vect(34.901, 6.538, -47.921), 3.1, true, [vect(81.277, 3, -33.813), false, true], false, false, [[vect(50.834, 8.075, -54.819), vect(57.642, 9.04, -31.129), false, true]], [], []], [vect(52.234, 9.776, -46.683), 2.1, true, [vect(29.187, -5.149, -57.614), false, true], false, false, [], [], []], [vect(49.882, 8.194, -43.679), 1.6, true, [vect(40.567, 3, -74.759), false, true], false, false, [], [], []], [vect(44.521, -5.151, -40.602), 2.05, true, [false, false, true], false, false, [[vect(49.324, 1.19, -37.771), false, false, true], [vect(48.277, 3.752, -38.973), false, false, true]], [], []], [vect(52.971, -3.147, -35.142), 1.6, true, [false, false, true], false, false, [[vect(47.274, 2.719, -40.081), false, false, true]], [], []], [vect(55.236, 9.926, -43.698), 2.5, true, [vect(65.064, -3.003, -16.704), false, true], false, false, [[vect(62.842, 19.07, -37.046), false, false, true]], [], []], [vect(64.41, 9.645, -34.496), 2.5, true, [false, false, true], false, false, [[vect(69.796, 16.233, -38.235), vect(64.54, -3.004, -19.724), false, true]], [], []], [vect(74.661, 2.107, -34.006), 3.2, true, [false, false, true], false, false, [], [], []], [vect(90.994, -2.995, -41.551), 2.65, true, [vect(77.22, 1.881, -10.617), false, true], false, false, [], [], []], [vect(89.349, 3, -25.413), 2.7, true, [false, false, true], false, false, [], [], []], [vect(89.743, 6, 9.659), 3.2, true, [vect(63.739, 9, 32.987), false, true], false, false, [], [], []], [vect(105.806, 11.15, 11.972), 3.65, true, [vect(90.017, 1, 25.15), false, true], false, false, [], [], []], [vect(98.576, 1, 17.098), 2.35, true, [vect(74.045, 4.074, 45.031), false, true], false, false, [], [], []], [vect(99.505, -0.941, 40.727), 2.7, true, [vect(50.565, 1, 25.999), false, true], false, false, [], [], []], [vect(82.067, 1, 57.245), 1.7, true, [false, false, true], false, false, [[vect(75.979, 4.118, 44.761), false, false, true]], [], []], [vect(73.136, -0.082, 30.793), 2.25, true, [vect(62.304, 9, 33.093), false, true], false, false, [], [], []], [vect(69.684, 9, 27.174), 2.05, true, [false, false, true], false, false, [], [], []], [vect(73.136, -0.082, 30.793), 2.3, true, [vect(54.497, 9.002, 3.483), false, true], false, false, [], [], []], [vect(69.684, 9, 27.174), 2.15, true, [false, false, true], false, false, [], [], []], [vect(73.136, -0.082, 30.793), 2.2, true, [vect(58.318, 8.354, 20.434), false, true], false, false, [], [], []], [vect(69.684, 9, 27.174), 2.1, true, [false, false, true], false, false, [], [], []], [vect(73.136, -0.082, 30.793), 1.95, true, [vect(70.575, -3.169, -13.703), false, true], false, false, [], [], []], [vect(69.684, 9, 27.174), 2, true, [false, false, true], false, false, [[vect(82.337, 18.124, 10.837), false, false, true]], [], []], [vect(82.538, 11.231, 14.719), 1.6, true, [vect(76.842, 9, 16.702), false, true], false, false, [], [[vect(80.976, 14.169, 15.348), 2], [vect(84.692, 14.953, 18.159), 2.4], [vect(77.334, 15.198, 12.161), 4.7], [vect(89.934, 15.083, 15.289), 6.8], [vect(83.733, 8.304, 8.94), 4.4]], []], [vect(79.534, 9, 18.393), 2.9, true, [false, false, true], false, false, [], [], []], [vect(58.138, 8.354, 20.653), 1.3, true, [vect(82.487, 6, 2.876), false, true], false, false, [], [], []], [vect(51.788, 9, 7.084), 2.6, true, [false, false, true], false, false, [], [], []], [vect(76.998, 1.881, -10.704), 2.35, true, [false, false, true], false, false, [], [], []], [vect(99.791, -2.122, -29.523), 3.1, true, [false, false, true], false, false, [], [], []]]
 
 
 rule "HUD guidance text (Originally from peace's mercy parkour editor: T6QQT)":
