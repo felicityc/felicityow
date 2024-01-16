@@ -220,12 +220,13 @@ rule "Small message text (Originally from peace's mercy parkour editor: T6QQT)":
 
 rule "Player title (Originally from peace's mercy parkour editor: T6QQT)":
     Vips = [["Peace", "{0} Peace".format(abilityIconString(Hero.MERCY, Button.ABILITY_1)), Color.WHITE], ["冰丶柠檬", "{0} IceLemon".format(abilityIconString(Hero.ANA, Button.ABILITY_1)), Color.WHITE], ["Sera", "", Color.WHITE], ["풋사과의그린애플", "", Color.GREEN], ["kroissant", "", Color.SKY_BLUE]]
+    Vips[len(Vips)] = ["Felicity", "{0}Felicity{0}".format(abilityIconString(Hero.KIRIKO, Button.ULTIMATE)), rgba(126, 132, 247, 211)]
     #[0] Fill in the player's nickname; 
     #[1] Fill in the display text, If not fill in, The default is the player's nickname; 
     #[2] Fill in the text color, White is a random color
-    Vips[len(Vips)] = ["", "", Color.WHITE]
-    Vips[len(Vips)] = ["", "", Color.WHITE]
-    Vips[len(Vips)] = ["", "", Color.WHITE]
+    Vips[len(Vips)] = ["EggsBenna", "♡EggsBenna♡ {0}".format(abilityIconString(Hero.MERCY, Button.ULTIMATE)), rgb(255, 158, 229)]
+    Vips[len(Vips)] = ["amethyst", "amethyst {0}".format(abilityIconString(Hero.GENJI, Button.ULTIMATE)), rgb(204, 0, 0)]
+    Vips[len(Vips)] = ["PoTayTo", "PoTayTo {0}".format(abilityIconString(Hero.DVA, Button.ULTIMATE)), Color.YELLOW]
 
 
 rule "Personalized Configuration (Originally from peace's mercy parkour editor: T6QQT)":
@@ -324,7 +325,7 @@ rule "Personalized Configuration (Originally from peace's mercy parkour editor: 
     #Bot teleport position effect color(Refresh, Need Resurrect)
     Config[50] = Color.RED
     #Bot default position
-    Config[60] = vect(-999, -999, -999)
+    Config[60] = vect(0, -999, 0)
     #Dome personalization configuration: [0] color; [1] postion; [2] radius
     Config[61] = [Color.VIOLET, (nearestWalkablePosition(vect(500, -500, 500)) + nearestWalkablePosition(vect(-500, -500, -500))) / 2, 10000]
     #Six-man star personalized configuration: [0] color; [1] postion; [2] radius
@@ -2056,6 +2057,7 @@ def InitializeGlobalVariables():
 def InitializePlayerVariables():
     @Name "Subroutine InitializePlayerVariables (Originally from peace's mercy parkour editor: T6QQT)"
     
+    eventPlayer.preloadHero(Hero.WIDOWMAKER)
     eventPlayer.checkpoint = 0
     eventPlayer.freeMode = false
     eventPlayer.spectatorMode = false
@@ -2153,14 +2155,15 @@ def CreatePlayerHUDAndEffects():
     @Name "Subroutine CreatePlayerHUDAndEffects (Originally from peace's mercy parkour editor: T6QQT)"
     
     if CompMode == true:
-        createInWorldText(eventPlayer if eventPlayer.checkpoint == len(Checkpoint) - 1 else null, eventPlayer.segmentTimeString, vect(175, 18, 0), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.SKY_BLUE, SpecVisibility.DEFAULT)
-        createInWorldText(eventPlayer if eventPlayer.checkpoint == len(Checkpoint) - 1 else null, eventPlayer.personalBestString, vect(200, 18.009, 0), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.BLUE, SpecVisibility.DEFAULT)
-        createInWorldText(eventPlayer if eventPlayer.checkpoint == len(Checkpoint) - 1 else null, FirstPlaceTimeString, vect(225, 18, 0), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, rgb(255, 215, 0), SpecVisibility.DEFAULT)
-        createInWorldText(eventPlayer if eventPlayer.checkpoint == len(Checkpoint) - 1 else null, eventPlayer.bestSegmentsArrayString, vect(250, 18, 0), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, rgb(150, 230, 210), SpecVisibility.DEFAULT)
-        hudSubheader(eventPlayer, "Sum of Best: {0}".format(eventPlayer.sumOfBestSegments) if eventPlayer.personalBestArray else "", HudPosition.RIGHT, 1, rgb(150, 230, 210), HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-        hudSubheader(eventPlayer, "Previous Segment: {0} {1}".format(eventPlayer.segmentTimeArray[eventPlayer.checkpoint - 1] if eventPlayer.checkpoint else "N/A", "({0})".format(eventPlayer.segmentVsPersonalBestArray[eventPlayer.checkpoint - 1]) if eventPlayer.checkpoint and eventPlayer.personalBestArray else ""), HudPosition.RIGHT, 1, (rgb(255, 215, 0) if eventPlayer.segmentTimeArray[eventPlayer.checkpoint - 1] <= eventPlayer.bestSegmentsArray[eventPlayer.checkpoint - 1] else Color.GREEN if eventPlayer.segmentTimeArray[eventPlayer.checkpoint - 1] <= eventPlayer.personalBestArray[eventPlayer.checkpoint - 1] else Color.RED) if eventPlayer.checkpoint and eventPlayer.personalBestArray else Color.GREEN, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
+        createInWorldText(eventPlayer if eventPlayer.checkpoint == len(Checkpoint) - 1 else null, eventPlayer.segmentTimeString, vect(54.66, -12, 30.9), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.SKY_BLUE, SpecVisibility.DEFAULT)
+        createInWorldText(eventPlayer if eventPlayer.checkpoint == len(Checkpoint) - 1 else null, eventPlayer.personalBestString, vect(61.42, -12, 25.74), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.BLUE, SpecVisibility.DEFAULT)
+        createInWorldText(eventPlayer if eventPlayer.checkpoint == len(Checkpoint) - 1 else null, FirstPlaceTimeString, vect(68.18, -12, 18.88), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, rgb(255, 215, 0), SpecVisibility.DEFAULT)
+        createInWorldText(eventPlayer if eventPlayer.checkpoint == len(Checkpoint) - 1 else null, eventPlayer.bestSegmentsArrayString, vect(74.94, -12, 12.02), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, rgb(150, 230, 210), SpecVisibility.DEFAULT)
     else:
-    hudSubtext(eventPlayer, ("Distance to bot: {0}\r\nCharge Needed: {1}%\r\n{2}".format(distance(eventPlayer, eventPlayer.targetBot) - 0.19, 58.34 + ((distance(eventPlayer, eventPlayer.targetBot) - 40.19) * 2.5) if distance(eventPlayer, eventPlayer.targetBot) > 40.19 else 58.34, "Last Damage: {0}".format(eventPlayer.recentDamage))) if eventPlayer.checkpointA[3][0] else "Distance to bot: N/A\nCharge Needed: N/A\nLast Damage: {0}".format(eventPlayer.recentDamage), HudPosition.RIGHT, 2, Color.GREEN if distance(eventPlayer, eventPlayer.targetBot) < 40.19 else Color.YELLOW if distance(eventPlayer, eventPlayer.targetBot) < 56.66 else Color.RED, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
+    hudSubtext(eventPlayer, ("Distance to bot: {0}\r\nCharge Needed: {1}%\r\n{2}".format(distance(eventPlayer, eventPlayer.targetBot) - 0.19, 58.33 + ((distance(eventPlayer, eventPlayer.targetBot) - 40.19) * 2.5) if distance(eventPlayer, eventPlayer.targetBot) > 40.19 else 58.33, "Last Damage: {0}".format(eventPlayer.recentDamage))) if eventPlayer.checkpointA[3][0] else "Distance to bot: N/A\nCharge Needed: N/A\nLast Damage: {0}".format(eventPlayer.recentDamage), HudPosition.RIGHT, 2, Color.GREEN if distance(eventPlayer, eventPlayer.targetBot) < 40.19 else Color.YELLOW if distance(eventPlayer, eventPlayer.targetBot) < 56.66 else Color.RED, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
+    if eventPlayer.editModeCharacterResetted == 1:
+        wait(0.03)
+        destroyHudText(getLastCreatedText())
     createInWorldText(getAllPlayers(), "{0}  {1}".format(eventPlayer.playerNickname, eventPlayer.checkpoint if EditMode else eventPlayer.displayedCheckpoint), eventPlayer, 1.3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, eventPlayer.playerColor, SpecVisibility.DEFAULT)
     hudSubtext(eventPlayer, "{0} {1} / {2}".format(Config[13], eventPlayer.checkpoint if EditMode else eventPlayer.displayedCheckpoint, "{0}{1}{2}".format(len(Checkpoint) - 1 if EditMode else evalOnce((len([player for player in Checkpoint if not player[5]])) - 1), " [{0}]".format((len([player for player in Checkpoint if not player[5]])) - 1) if EditMode and any([player[5] for player in Checkpoint]) else "", TipHudSpaceHolder[0])), HudPosition.TOP, 1, Config[14], HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
     createEffect(eventPlayer if eventPlayer.checkpointA[0] and (EditMode or eventPlayer.checkpointB[0]) else null, Effect.RING, Config[10] if eventPlayer.checkpointA[5] else Config[0], eventPlayer.checkpointA[0], eventPlayer.checkpointA[1], EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
@@ -2177,6 +2180,10 @@ def CreatePlayerHUDAndEffects():
     else:
         createEffect(eventPlayer if eventPlayer.checkpointB[0] else null, Effect.BAD_AURA, Config[9] if eventPlayer.checkpointB[5] else Config[6], eventPlayer.checkpointB[0], eventPlayer.checkpointB[1], EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
     if not EditMode:
+        if CompMode == true:
+            hudSubheader(eventPlayer, "Previous Segment: {0} {1}".format(eventPlayer.segmentTimeArray[eventPlayer.checkpoint - 1] if eventPlayer.checkpoint else "N/A", "({0})".format(eventPlayer.segmentVsPersonalBestArray[eventPlayer.checkpoint - 1]) if eventPlayer.checkpoint and eventPlayer.personalBestArray else ""), HudPosition.RIGHT, 1, (rgb(255, 215, 0) if eventPlayer.segmentTimeArray[eventPlayer.checkpoint - 1] <= eventPlayer.bestSegmentsArray[eventPlayer.checkpoint - 1] else Color.GREEN if eventPlayer.segmentTimeArray[eventPlayer.checkpoint - 1] <= eventPlayer.personalBestArray[eventPlayer.checkpoint - 1] else Color.RED) if eventPlayer.checkpoint and eventPlayer.personalBestArray else Color.GREEN, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
+            hudSubheader(eventPlayer, "Sum of Best: {0}".format(eventPlayer.sumOfBestSegments) if eventPlayer.personalBestArray else "", HudPosition.RIGHT, 3, rgb(150, 230, 210), HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+        else:
         hudText(getAllPlayers() if eventPlayer.bestRecord and Top5.index(eventPlayer.playerNickname) < 0 else null, heroIcon(Hero.MERCY), eventPlayer.playerNickname, "{0} sec".format(eventPlayer.bestRecord), HudPosition.LEFT, eventPlayer.bestRecord / 100, Config[28], Config[28], Config[28], HudReeval.VISIBILITY_SORT_ORDER_AND_STRING, SpecVisibility.DEFAULT)
         hudSubheader(eventPlayer, "Running Total vs pb: {0}".format(eventPlayer.vsPersonalBestRunningTally) if eventPlayer.checkpoint and eventPlayer.personalBestArray else "", HudPosition.RIGHT, 1, Color.GREEN if eventPlayer.vsPersonalBestRunningTally <= 0 else Color.RED, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
         hudHeader(eventPlayer if Tips[eventPlayer.displayedCheckpoint] and not eventPlayer.freeMode and not eventPlayer.finished else null, "{0} : {1}".format(heroIcon(Hero.MERCY), Tips[eventPlayer.displayedCheckpoint]), HudPosition.TOP, 100, Color.TURQUOISE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
@@ -2495,7 +2502,7 @@ rule "Rule 102":
     eventPlayer.segmentTimeString = "{0}\r\nTotal Time: {1}".format(eventPlayer.segmentTimeString, eventPlayer.time)
     if eventPlayer.time <= eventPlayer.bestRecord:
         if eventPlayer.time <= FirstPlaceTime:
-            FirstPlaceTimeString = "1st Place Segments:"
+            FirstPlaceTimeString = "1ST Place Segments:"
             for eventPlayer.segmentTimeArrayCounter in range(len(eventPlayer.segmentTimeArray)):
                 FirstPlaceTimeString = "{0}\r\nCheckpoint {1}: {2}".format(FirstPlaceTimeString, eventPlayer.segmentTimeArrayCounter, FirstPlaceTimeArray[eventPlayer.segmentTimeArrayCounter])
             FirstPlaceTimeString = "{0}\nTotal Time: {1}".format(FirstPlaceTimeString, FirstPlaceTime)
@@ -2521,5 +2528,13 @@ rule "changing hero (hit need healing comms button) - ty to felicity for the cod
     wait(0.25)
     eventPlayer.editModeCharacterResetted = 1
     eventPlayer.resetHeroAvailability()
+
+
+rule "position indicator on hud":
+    @Event eachPlayer
+    @Condition EditMode == true
+    @Condition eventPlayer == hostPlayer
+    
+    hudSubheader(eventPlayer, "{0} -> {1}".format(eventPlayer.getPosition(), raycast(eventPlayer.getEyePosition(), eventPlayer.getFacingDirection(), getAllPlayers(), eventPlayer, true).getHitPosition()), HudPosition.LEFT, 0, Color.RED, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
 
