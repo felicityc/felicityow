@@ -1,3 +1,5 @@
+#by EggsBenna, this is a version that should be as uploaded by her
+
 #Global variables
 
 globalvar EditMode 0

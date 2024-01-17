@@ -1,0 +1,1 @@
+This folder is for widow parkour maps, and their accompanying editors, credit for who made a map if it was not made by myself is in here and will also be commented in the first line. Be sure to remove that comment if you compile it

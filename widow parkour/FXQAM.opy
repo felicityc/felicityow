@@ -1,16 +1,21 @@
-#wip by Felicity
+#to do:
+#add hardcore mode
+#standardize all lists
+#add detailed timer thing, and make it better not bad
+#remove all the korean and stuff, sadly, it is just crazy clutter and i cant do anything with it if i change stuff
+#This is an updated version of the editor, more in line for speedrunning and more competitive use compared to J1ANR, which is based on mercy parkour, which is more social
 
 settings {
     "main": {
-        "description": "You complained... about the bunnyhops... \r\nthe easiest movement mechanic in the game...\nand about 100% consistent glitch techniques...\nI will give you something to complain about...\n\rDifficulty: scry some more\nBy Felicity(#11283) (Code: ?????)\r\n\r\n\rMore Widow Parkour Maps: https://bit.ly/widowparkour\nBased on HiyaXD's modded version (J1ANR)\r\nof Peace's Mercy Parkour Editor (T6QQT)",
-        "modeName": "Widow Parkour, Volskaya (Unfair)"
+        "description": "Feature and theming adjustment by Feli\n\nModded Editor Code by HiyaXD: J1ANR\nOriginal Editor Code (by Peace): T6QQT\n\nFor making widow parkour maps.",
+        "modeName": "Widow Parkour Editor vFeli"
     },
     "lobby": {
         "allowPlayersInQueue": true,
         "mapRotation": "paused",
         "enableMatchVoiceChat": true,
-        "spectatorSlots": 6,
-        "team1Slots": 6,
+        "spectatorSlots": 12,
+        "team1Slots": 8,
         "team2Slots": 0,
         "returnToLobby": "never",
         "swapTeamsAfterMatch": false
@@ -18,11 +23,7 @@ settings {
     "gamemodes": {
         "skirmish": {
             "enabledMaps": [
-                {
-                    "watchpointGibraltar": [
-                        "evening"
-                    ]
-                }
+                "hanamura"
             ]
         },
         "tdm": {
@@ -50,6 +51,7 @@ settings {
                 "enableAbility2": false
             },
             "enabledHeroes": [
+                "mercy",
                 "widowmaker"
             ],
             "general": {
@@ -58,6 +60,12 @@ settings {
                 "enableSpawningWithUlt": true
             }
         }
+    },
+    "workshop": {
+        "Land on arrival point도착은 착지가 필요하다": true,
+        "New level crouch새 관문 앉기": true,
+        "New level radius새 관문 반경": 1.6,
+        "Skip  Back only after clearing the level need to turn on the Skip  Back": false
     }
 }
 
@@ -133,6 +141,7 @@ playervar sphereEffects 8
 playervar cloudEffects 9
 playervar objectivePosition 10
 playervar displayedCheckpoint 11
+playervar jump 12
 playervar bhop 13
 playervar bestRecord 14
 playervar playerData 15
@@ -169,6 +178,7 @@ playervar nearestOrb 45
 playervar botEffects 46
 playervar targetBot 47
 playervar movementCollision 48
+playervar resurrectTime 49
 playervar resurrectNumber 50
 playervar numberOfNeedResurrect 51
 playervar ability2 52
@@ -187,6 +197,7 @@ playervar sumOfBestSegments 64
 playervar bestSegmentsArray 65
 playervar bestSegmentsArrayString 66
 playervar editModeCharacterResetted 67
+playervar trueBotHealth 68
 
 
 #Subroutine names
@@ -232,6 +243,7 @@ subroutine KillOrResurrectBot 28
 #!extension explosionSounds
 #!extension explosionSounds
 #!extension explosionSounds
+#!extension explosionSounds
 #!extension buffStatusEffects
 #!extension buffStatusEffects
 #!extension buffStatusEffects
@@ -247,51 +259,72 @@ subroutine KillOrResurrectBot 28
 #!extension buffStatusEffects
 #!extension buffStatusEffects
 #!extension buffStatusEffects
+
+
+rule "Put the data here (Originally from peace's mercy parkour editor: T6QQT)":
 
 
 rule "Creator and code (Originally from peace's mercy parkour editor: T6QQT)":
     #String, Fill in the creator
-    CreatorAndCode[0] = "Felicity#11283"
+    CreatorAndCode[0] = ""
     #String, Fill in the code
-    CreatorAndCode[1] = "F6669"
+    CreatorAndCode[1] = ""
+
+
+rule "HUD guidance text (Originally from peace's mercy parkour editor: T6QQT)":
+    #Tips[0] = "Note: This map was made with 50% grapple sensitivity, so some levels might not work at other settings."
+    #Tips[1] = "Zen can't be killed from the start circle, use the grapple to find a way to kill him then land in the goal circle."
+    #Tips[2] = "If you need to kill a Zen it will have a blue arrow and outline, if you see another player's zen just ignore it."
+    #Tips[3] = "While on the ground, if you grapple above yourself and hold jump after you cancel grapple, you will bhop."
+    #Tips[6] = "If you walk off of a ledge without jumping you can bhop, giving you more time to connect your grapple."
+    #Tips[8] = "You can also bhop while scoped in, this allows you to stay scoped and shoot during the bhop."
+    #Tips[19] = "Sometimes using grapple at the edge of a floor you are underneath will cause you to get on top of it."
+
+
+rule "Map guidance text (Originally from peace's mercy parkour editor: T6QQT)":
+    #index, Fill in the level; 
+    #[0] Fill in the text;  
+    #[1] Fill in the postion (If not filled in, it will be displayed at the next checkpoint);  
+    #[2] Fill in the text size; 
+    #[3] Fill in the text color
+    #WorldTexts[38] = ["{0}\n{1}\n{2}".format("                                                    Thanks for playing!", "Here are the codes for some other maps (easiest to hardest):", "{0}\n{1}\n{2}".format("                 Chateau (Easy (3)):                             ZTEN5 by HiyaXD\n                 {0}".format("Junkertown (Normal (5)):           93TRD by HiyaXD\n                 {0}".format("Busan (Normal (6)):                           HYY7J by HiyaXD & CAROUSEL")), "                 Hanamura (Normal (6)):                 EQ188 by HiyaXD\n                 {0}".format("Circuit Royal (Normal (8)):          ER5CW by HiyaXD, murriner, and jlh311"), "                 Hollywood (Hard (10)):                   KW3AD by HiyaXD")), vect(108.741, 12.465, 12.009), 2, Color.BLUE]
 
 
 rule "Big message text (Originally from peace's mercy parkour editor: T6QQT)":
     #index, Fill in the level;    
-    # string, Fill in the text (Multiple texts in one level)
+    # string, Fill in the text (Multiple texts in one level) 
     BigMessages[0] = ["", ""]
+
+
+rule "Small message text (Originally from peace's mercy parkour editor: T6QQT)":
+    #index, Fill in the level;    
+    #String, Fill in the text (Multiple texts in one level) 
+    SmallMessages[0] = ["", ""]
 
 
 rule "Player title (Originally from peace's mercy parkour editor: T6QQT)":
     Vips = [["Peace", "{0} Peace".format(abilityIconString(Hero.MERCY, Button.ABILITY_1)), Color.WHITE], ["冰丶柠檬", "{0} IceLemon".format(abilityIconString(Hero.ANA, Button.ABILITY_1)), Color.WHITE], ["Sera", "", Color.WHITE], ["풋사과의그린애플", "", Color.GREEN], ["kroissant", "", Color.SKY_BLUE]]
     #[0] Fill in the player's nickname; 
     #[1] Fill in the display text, If not fill in, The default is the player's nickname; 
-    #[2] Fill in the text color, White is a random color
-    Vips[len(Vips)] = ["Felicity", "{0} Felicity".format(abilityIconString(Hero.KIRIKO, Button.ULTIMATE)), rgb(248, 200, 220)]
-    Vips[len(Vips)] = ["HiyaXD", "therealHiyaXD", Color.RED]
-    Vips[len(Vips)] = ["Caramel", "uwu Caramel <3", Color.ROSE]
-    Vips[len(Vips)] = ["Klarkasaurus", "<3 <3 Klarky", Color.ROSE]
-    Vips[len(Vips)] = ["ǞSŦRǞ", "cute {0}Astra uwu".format(iconString(Icon.HEART)), Color.BLUE]
-    Vips[len(Vips)] = ["alucar", "{0}Alucar >:3".format(iconString(Icon.POISON)), Color.RED]
-    Vips[len(Vips)] = ["Jølle", "J{0}lle".format(iconString(Icon.CROSS)), Color.RED]
-    Vips[len(Vips)] = ["C10H15N", "{0}".format(iconString(Icon.QUESTION_MARK)), Color.BLACK]
-    Vips[len(Vips)] = ["Kephrii", "{0}Critscan{0}".format(iconString(Icon.HEART)), Color.VIOLET]
-    Vips[len(Vips)] = ["Critscan", "{0}Kephrii".format(heroIcon(Hero.WIDOWMAKER)), Color.RED]
+    #[2] Fill in the text color, White is a random color 
+    Vips[len(Vips)] = ["", "", Color.WHITE]
+    Vips[len(Vips)] = ["", "", Color.WHITE]
+    Vips[len(Vips)] = ["", "", Color.WHITE]
 
 
 rule "Personalized Configuration (Originally from peace's mercy parkour editor: T6QQT)":
     #Ring color of this level
     Config[0] = rgb(34, 162, 192)
     #Bot icon color (Crouch Enabled)
-    Config[1] = Color.ROSE
+    Config[1] = Color.BLUE
     #Next checkpoint text
-    Config[2] = "Next checkpoint!"
+    Config[2] = "Come to me!"
     #Next checkpoint text size
-    Config[3] = 1.2
+    Config[3] = 1.6
     #Next checkpoint text color
-    Config[4] = Color.GRAY
+    Config[4] = Color.GREEN
     #Next checkpoint icon color
-    Config[5] = Color.TEAM_2
+    Config[5] = Color.LIME_GREEN
     #Next checkpoint effect color
     Config[6] = rgb(167, 168, 189)
     #Next checkpoint ring color
@@ -303,45 +336,45 @@ rule "Personalized Configuration (Originally from peace's mercy parkour editor: 
     #TP checkpoint ring color
     Config[10] = Color.RED
     #Bot name text
-    Config[11] = "'s target"
+    Config[11] = "`s zen"
     #Creator, code text color
-    Config[12] = rgba(248, 200, 220, 170)
+    Config[12] = rgba(251, 242, 227, 180)
     #Level Progress text
     Config[13] = "Level Progress"
     #Level Progress text color
-    Config[14] = Color.GRAY
+    Config[14] = Color.WHITE
     #Free mode enabled text
-    Config[15] = "Free mode activated."
+    Config[15] = "Free mode enabled"
     #Spectator mode enabled text
-    Config[16] = "Spectator mode activated."
+    Config[16] = "Spectator mode enabled"
     #Crouch disabled text
     Config[17] = "{0}Crouch Disabled".format(iconString(Icon.NO))
     #Crouch enabled text
     Config[18] = "Crouch Enabled"
     #No target bot text
-    Config[19] = "No target for this level."
+    Config[19] = "No zen for this level"
     #Need get orb text 
     #Display if not filled in: 
-    #This level has {number} orbs to pick up
+    #This level has {number} orbs to pick up 
     Config[20] = ""
     #Get orb text
-    Config[21] = "{0} You got it!".format(abilityIconString(Hero.TRACER, Button.ABILITY_1))
+    Config[21] = "BINGO"
     #Arrive but no get all the orbs
-    Config[22] = "You have to pick up the orb(s) first."
+    Config[22] = "You have to pick up the orb"
     #Ga refresh text
-    Config[23] = "{0} Also refreshed!".format(abilityIconString(Hero.WIDOWMAKER, Button.ABILITY_1))
+    Config[23] = "{0} Also refreshed!".format(abilityIconString(Hero.MERCY, Button.ABILITY_1))
     #Top5 text
     #Display if not filled in: 
     #Today`s Top {number}
-    Config[24] = "This Instance's Fastest Times"
+    Config[24] = ""
     #Top5 text color
-    Config[25] = rgba(248, 200, 220, 170)
+    Config[25] = Color.GREEN
     #Other winner text
-    Config[26] = "Honorable Mentions"
+    Config[26] = "HighLights"
     #Other winner text color
-    Config[27] = Color.GRAY
+    Config[27] = Color.WHITE
     #Other winner ranking color
-    Config[28] = rgba(248, 200, 220, 170)
+    Config[28] = rgb(158, 255, 187)
     #Unlimited Ga text
     Config[29] = "{0} set to unlimited".format(abilityIconString(Hero.MERCY, Button.ABILITY_1))
     #Single Ga text
@@ -351,13 +384,13 @@ rule "Personalized Configuration (Originally from peace's mercy parkour editor: 
     #Resurrection success text
     Config[32] = "You have successfully resurrected the target"
     #Arrive but no resurrect bot
-    Config[33] = "Kill the target and land in the checkpoint. "
+    Config[33] = "Kill Zen then Collect all the orbs (if there are any)."
     #Obstacle sphere color
     Config[40] = Color.BLACK
     #Elastic cloud color
     Config[41] = Color.BLUE
     #Orb color(Plus)
-    Config[42] = Color.PURPLE
+    Config[42] = Color.RED
     #Orb icon color(Plus)
     Config[43] = Color.YELLOW
     #Orb color(Refresh)
@@ -400,8 +433,8 @@ rule "Player initialization (Originally from peace's mercy parkour editor: T6QQT
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.hasSpawned() == true
-    
     #@Condition eventPlayer.isDummy() == false
+    
     eventPlayer.disableGamemodeInWorldUi()
     getAllPlayers().disableNameplatesFor(getAllPlayers())
     eventPlayer.enableDeathSpectateAllPlayers()
@@ -467,6 +500,7 @@ rule "create / delete checkpoint, orb, sphere, cloud (Originally from peace's me
     
     if eventPlayer.isHoldingButton(Button.PRIMARY_FIRE):
         if eventPlayer.editMode == 1:
+            #0, checkponit position
             #1, checkpoint radius
             #2, crouch
             #3, bot, default empty array(BotVector, NeedResurrect, RefreshAbility1)
@@ -1143,8 +1177,8 @@ rule "Resurrection after death (Originally from peace's mercy parkour editor: T6
     @Event playerDied
     @Team 1
     @Condition eventPlayer.spectatorMode == false
-    
     #@Condition eventPlayer.isDummy() == false
+    
     if not eventPlayer.finished and not eventPlayer.freeMode:
         eventPlayer.teleport(eventPlayer.checkpointA[0])
         eventPlayer.mistake += 1
@@ -1213,7 +1247,7 @@ rule "Get orb (Originally from peace's mercy parkour editor: T6QQT)":
             eventPlayer.setAbility2Enabled(true)
             kill(eventPlayer.targetBot, null)
             eventPlayer.ability2 = true
-        elif eventPlayer.targetBot.isDead():
+        elif not eventPlayer.targetBot.isAlive():
             eventPlayer.targetBot.resurrect()
         TeleportBotToRefreshPosition()
     smallMessage(eventPlayer, "{0}{1}{2}".format(Config[21], " {0} / {1}".format(len(eventPlayer.currentOrb) - len(eventPlayer.tempCurrentOrb), len(eventPlayer.currentOrb)) if not eventPlayer.finished and not eventPlayer.freeMode else "", Config[23] if eventPlayer.nearestOrb[1] and not eventPlayer.checkpointA[4] else ""))
@@ -1239,7 +1273,6 @@ rule "Back to point refresh ablities (Originally from peace's mercy parkour edit
             TeleportCurrentBot()
     eventPlayer.isSetAbilities = false
 
-
 rule "Crouch disabled tips (Originally from peace's mercy parkour editor: T6QQT)":
     @Event eachPlayer
     @Team 1
@@ -1251,8 +1284,7 @@ rule "Crouch disabled tips (Originally from peace's mercy parkour editor: T6QQT)
     smallMessage(eventPlayer, Config[17])
     wait(1)
 
-
-rule "3rd person (Originally from peace's mercy parkour editor: T6QQT)":
+rule "3rd person (Originally from T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.isHoldingButton(Button.RELOAD) == true
@@ -1266,7 +1298,7 @@ rule "3rd person (Originally from peace's mercy parkour editor: T6QQT)":
         eventPlayer.startCamera(raycast(eventPlayer + (Vector.UP * (distance(eventPlayer.getEyePosition(), eventPlayer) + 0.5)), raycast(eventPlayer + (Vector.UP * (distance(eventPlayer.getEyePosition(), eventPlayer) + 0.5)), eventPlayer + (Vector.UP * (distance(eventPlayer.getEyePosition(), eventPlayer) + 0.5)) + eventPlayer.getFacingDirection() * -3, null, eventPlayer, true).getHitPosition(), null, eventPlayer, true).getHitPosition(), eventPlayer + eventPlayer.getFacingDirection() * 100, 100)
     else:
         eventPlayer.stopCamera()
-
+    
 
 rule "Back to point (Originally from peace's mercy parkour editor: T6QQT)":
     @Event eachPlayer
@@ -1549,19 +1581,6 @@ rule "Show or hide shortcuts (Originally from peace's mercy parkour editor: T6QQ
             ShowHotKeyPlayers.remove(eventPlayer)
 
 
-rule "Send hello or goodbye robot automatic reply (Originally from peace's mercy parkour editor: T6QQT)":
-    @Event eachPlayer
-    @Team 1
-    @Condition (eventPlayer.isCommunicating(Comms.HELLO) or eventPlayer.isCommunicating(Comms.GOODBYE)) == true
-    
-    if eventPlayer.isCommunicating(Comms.HELLO):
-        wait(0.5)
-        eventPlayer.targetBot.communicate(Comms.HELLO)
-    else:
-        wait(0.5)
-        eventPlayer.targetBot.communicate(Comms.GOODBYE)
-
-
 rule "Teleport animation (Originally from peace's mercy parkour editor: T6QQT)":
     @Event eachPlayer
     @Team 1
@@ -1671,8 +1690,8 @@ rule "Finished setting (Originally from peace's mercy parkour editor: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.checkpoint >= len(Checkpoint) - 1
-    
     #@Condition eventPlayer.isDummy() == false
+    
     eventPlayer.finished = true
     EnableAllAbilities()
 
@@ -1680,8 +1699,8 @@ rule "Finished setting (Originally from peace's mercy parkour editor: T6QQT)":
 rule "Not finished setting (Originally from peace's mercy parkour editor: T6QQT)":
     @Event eachPlayer
     @Condition eventPlayer.checkpoint < len(Checkpoint) - 1
-    
     #@Condition eventPlayer.isDummy() == false
+    
     eventPlayer.finished = false
     if not eventPlayer.freeMode:
         eventPlayer.setUltEnabled(false)
@@ -1695,8 +1714,8 @@ rule "Set Ultimate Charge 100% (Originally from peace's mercy parkour editor: T6
     @Team 1
     @Condition (eventPlayer.finished or eventPlayer.freeMode) == true
     @Condition eventPlayer.getUltCharge() < 100
-    
     #@Condition eventPlayer.isDummy() == false
+    
     eventPlayer.setUltCharge(100)
 
 
@@ -1752,44 +1771,6 @@ rule "Interact, teleporting players (Originally from peace's mercy parkour edito
     else:
         eventPlayer.teleport(eventPlayer.getPlayerClosestToReticle(Team.ALL))
 
-
-rule "Primary / Secondary Fire, select hero (Originally from peace's mercy parkour editor: T6QQT)":
-    @Event eachPlayer
-    @Team 1
-    @Condition EditMode == false
-    @Condition eventPlayer.finished == true
-    @Condition (eventPlayer.isHoldingButton(Button.PRIMARY_FIRE) or eventPlayer.isHoldingButton(Button.SECONDARY_FIRE)) == true
-    
-    if eventPlayer.isHoldingButton(Button.PRIMARY_FIRE):
-        eventPlayer.chooseHero += 1 - len(getAllHeroes()) if eventPlayer.chooseHero == len(getAllHeroes()) - 1 else 1
-    elif eventPlayer.isHoldingButton(Button.SECONDARY_FIRE):
-        eventPlayer.chooseHero -= 1 - len(getAllHeroes()) if eventPlayer.chooseHero == 0 else 1
-    eventPlayer.preloadHero(getAllHeroes()[eventPlayer.chooseHero])
-
-
-rule "emote sync within the radius (Originally from peace's mercy parkour editor: T6QQT)":
-    @Event eachPlayer
-    @Team 1
-    @Condition EditMode == false
-    @Condition eventPlayer.isCommunicatingEmote() == true
-    @Condition eventPlayer.isHoldingButton(Button.RELOAD) == true
-    @Condition (eventPlayer.finished or eventPlayer.freeMode) == true
-    
-    EmoteSyncPlayers = [player for player in getPlayersInRadius(eventPlayer, 15, Team.ALL, LosCheck.OFF) if player.isCommunicatingEmote() and player.getCurrentHero() == eventPlayer.getCurrentHero()]
-    EmoteSyncPlayers = [[player, 0 if player.isCommunicating(Comms.EMOTE_UP) else 1 if player.isCommunicating(Comms.EMOTE_DOWN) else 2 if player.isCommunicating(Comms.EMOTE_LEFT) else 3] for player in EmoteSyncPlayers]
-    [player[0] for player in EmoteSyncPlayers].cancelPrimaryAction()
-    wait(0.2)
-    for I in range(len(EmoteSyncPlayers)):
-        if EmoteSyncPlayers[I][1] == 0:
-            EmoteSyncPlayers[I][0].communicate(Comms.EMOTE_UP)
-        elif EmoteSyncPlayers[I][1] == 1:
-            EmoteSyncPlayers[I][0].communicate(Comms.EMOTE_DOWN)
-        elif EmoteSyncPlayers[I][1] == 2:
-            EmoteSyncPlayers[I][0].communicate(Comms.EMOTE_LEFT)
-        elif EmoteSyncPlayers[I][1] == 3:
-            EmoteSyncPlayers[I][0].communicate(Comms.EMOTE_RIGHT)
-
-
 rule "Voice Line Up,  Swap effect (Originally from peace's mercy parkour editor: T6QQT)":
     @Event eachPlayer
     @Team 1
@@ -1798,6 +1779,7 @@ rule "Voice Line Up,  Swap effect (Originally from peace's mercy parkour editor:
     @Condition eventPlayer.isCommunicating(Comms.VOICE_LINE_UP) == true
     
     destroyEffect(eventPlayer.playerEffect if eventPlayer.playerEffect else null)
+    #why dont we just make an array for this lol......
     eventPlayer.choosePlayerEffect = random.randint(0, 21)
     if eventPlayer.choosePlayerEffect == 0:
         createEffect(getAllPlayers(), Effect.SPHERE, eventPlayer.playerColor, eventPlayer, eventPlayer.bodySize, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
@@ -1844,39 +1826,6 @@ rule "Voice Line Up,  Swap effect (Originally from peace's mercy parkour editor:
     elif eventPlayer.choosePlayerEffect == 21:
         createEffect(getAllPlayers(), Effect.WRECKING_BALL_PILEDRIVER_FIRE, eventPlayer.playerColor, eventPlayer, eventPlayer.bodySize, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
     eventPlayer.playerEffect = getLastCreatedEntity()
-
-
-rule "Fast melee (Originally from peace's mercy parkour editor: T6QQT)":
-    @Event eachPlayer
-    @Team 1
-    @Condition EditMode == false
-    @Condition (eventPlayer.finished or eventPlayer.freeMode) == true
-    @Condition eventPlayer.getCurrentHero() != Hero.REINHARDT
-    @Condition eventPlayer.getCurrentHero() != Hero.BRIGITTE
-    @Condition eventPlayer.isHoldingButton(Button.MELEE) == true
-    @Condition eventPlayer.isHoldingButton(Button.RELOAD) == false
-    @Condition eventPlayer.isHoldingButton(Button.ABILITY_1) == false
-    @Condition eventPlayer.isHoldingButton(Button.ABILITY_2) == false
-    
-    wait(0.5, Wait.ABORT_WHEN_FALSE)
-    eventPlayer.disallowButton(Button.PRIMARY_FIRE)
-    eventPlayer.disallowButton(Button.SECONDARY_FIRE)
-    eventPlayer.disallowButton(Button.ABILITY_1)
-    eventPlayer.disallowButton(Button.ABILITY_2)
-    eventPlayer.disallowButton(Button.ULTIMATE)
-    while eventPlayer.isHoldingButton(Button.MELEE):
-        wait()
-        eventPlayer.forceButtonPress(Button.MELEE)
-        wait(0.034)
-        eventPlayer.cancelPrimaryAction()
-        eventPlayer.setAbilityCooldown(Button.MELEE, 0)
-        wait(0.05)
-    eventPlayer.allowButton(Button.PRIMARY_FIRE)
-    eventPlayer.allowButton(Button.SECONDARY_FIRE)
-    eventPlayer.allowButton(Button.ABILITY_1)
-    eventPlayer.allowButton(Button.ABILITY_2)
-    eventPlayer.allowButton(Button.ULTIMATE)
-
 
 def ErrorWarningMessage():
     @Name "Subroutine ErrorWarningMessage (Originally from peace's mercy parkour editor: T6QQT)"
@@ -2143,7 +2092,7 @@ def CreatePlayerTargetBot():
     @Name "Subroutine  CreatePlayerTargetBot (Originally from peace's mercy parkour editor: T6QQT)"
     
     if not entityExists(eventPlayer.targetBot):
-        createDummy(Hero.MERCY, getOppositeTeam(eventPlayer.getTeam()), eventPlayer.getSlot() + getNumberOfSlots(Team.ALL), Checkpoint[eventPlayer.checkpoint][3][0] if Checkpoint[eventPlayer.checkpoint][3][0] else Config[60], null)
+        createDummy(Hero.ZENYATTA, getOppositeTeam(eventPlayer.getTeam()), eventPlayer.getSlot() + getNumberOfSlots(Team.ALL), Checkpoint[eventPlayer.checkpoint][3][0] if Checkpoint[eventPlayer.checkpoint][3][0] else Config[60], null)
         eventPlayer.targetBot = getLastCreatedEntity()
         eventPlayer.targetBot.setMaxHealth(500)
         wait()
@@ -2151,12 +2100,12 @@ def CreatePlayerTargetBot():
         wait()
         eventPlayer.targetBot.startFacing(directionTowards(updateEveryTick(eventPlayer.targetBot.getEyePosition()), updateEveryTick(eventPlayer.getEyePosition())), 9999, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
         if eventPlayer.targetBot.getCurrentHero() == Hero.TRACER or eventPlayer.targetBot.getCurrentHero() == Hero.DVA:
-            eventPlayer.editModeCharacterResetted = 150
+            eventPlayer.trueBotHealth = 150
         else:
             if eventPlayer.targetBot.getCurrentHero() == Hero.WIDOWMAKER:
-                eventPlayer.editModeCharacterResetted = 175
+                eventPlayer.trueBotHealth = 175
             else:
-                eventPlayer.editModeCharacterResetted = 200
+                eventPlayer.trueBotHealth = 200
 
 
 def CreateGlobalHUD():
@@ -2166,15 +2115,15 @@ def CreateGlobalHUD():
     if getCurrentGamemode() == Gamemode.SKIRMISH:
         setObjectiveDescription(getAllPlayers(), "Elapsed time {0} minutes {1} seconds".format(floor(getTotalTimeElapsed() / 60), floor(getTotalTimeElapsed() % 60)), HudReeval.VISIBILITY_AND_STRING)
     else:
-        hudSubheader(getAllPlayers(), "Elapsed time {0} minutes {1} seconds".format(floor(getTotalTimeElapsed() / 60), floor(getTotalTimeElapsed() % 60)), HudPosition.TOP, 0, rgba(248, 200, 220, 170), HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+        hudSubheader(getAllPlayers(), "Elapsed time {0} minutes {1} seconds".format(floor(getTotalTimeElapsed() / 60), floor(getTotalTimeElapsed() % 60)), HudPosition.TOP, 0, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
     createEffect(localPlayer if localPlayer.bhop else null, Effect.ANA_NANO_BOOSTED, null, localPlayer, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-    hudSubtext(getAllPlayers(), "Widow Parkour {0} by {1}\nCode: {2}\nbased on HiyaXD's mod [J1ANR]\nof Peace's Mercy editor [T6QQT]".format(getCurrentMap(), CreatorAndCode[0] if CreatorAndCode[0] else "Anonymous", CreatorAndCode[1] if CreatorAndCode[1] else "Not yet"), HudPosition.LEFT, -999, Config[12], HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-    hudSubtext(getAllPlayers(), "Youtube Guide: {0}\r\nMore Widow Parkour Maps: {1}\r\nDiscord: {2}".format("https://bit.ly/f6669guide", "https://bit.ly/widowparkour", "Not yet!"), HudPosition.LEFT, -998, Config[12], HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-    hudSubtext(getAllPlayers(), " ", HudPosition.LEFT, -997, null, HudReeval.VISIBILITY, SpecVisibility.DEFAULT)
-    hudSubtext(getAllPlayers(), " ", HudPosition.RIGHT, 2, null, HudReeval.VISIBILITY, SpecVisibility.DEFAULT)
+    hudSubtext(getAllPlayers(), "Widow Parkour {0} by {1}\nCode: {2}".format(getCurrentMap(), CreatorAndCode[0] if CreatorAndCode[0] else "Anonymous", CreatorAndCode[1] if CreatorAndCode[1] else "Not yet"), HudPosition.LEFT, -999, Config[12], HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    #hudSubtext(getAllPlayers(), " ", HudPosition.LEFT, -998, null, HudReeval.VISIBILITY, SpecVisibility.DEFAULT)
+    #hudSubtext(getAllPlayers(), " ", HudPosition.RIGHT, 2, null, HudReeval.VISIBILITY, SpecVisibility.DEFAULT)
     hudText([player for player in getAllPlayers() if not EditMode and not player.finished], null, " \n　\n　", " ", HudPosition.RIGHT, 3, null, null, null, HudReeval.VISIBILITY, SpecVisibility.DEFAULT)
-    hudSubtext(getAllPlayers(), " ", HudPosition.RIGHT, 10, null, HudReeval.VISIBILITY, SpecVisibility.DEFAULT)
+    #hudSubtext(getAllPlayers(), " ", HudPosition.RIGHT, 10, null, HudReeval.VISIBILITY, SpecVisibility.DEFAULT)
     hudSubtext(getAllPlayers(), "{0} Double click ({1}) Show or hide controls".format(abilityIconString(Hero.TORBJORN, Button.ABILITY_2), buttonString(Button.INTERACT)), HudPosition.RIGHT, 98, rgba(220, 220, 220, 200), HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    #this seems to be a lot of translating hud elements
     hudText(ShowHotKeyPlayers, null, "－－－－－－－－－－－－－－－－－－－－{0}{1}".format("－－－－" if "{0}".format(Hero.MERCY) == "Mercy" else (("－－－－－" if strLen(buttonString(Button.INTERACT)) > 5 else "－－－") if strLen(buttonString(Button.INTERACT)) > 3 else "－－") if strLen(buttonString(Button.INTERACT)) > 1 else "", "－－－－－－－－－－－－－" if "{0}".format(Hero.MERCY) == "マーシー" else "－－－－－－－－－－" if "{0}".format(Hero.MERCY) == "慈悲" else ""), "Preview next point : {0} + {1}\n{2}".format(buttonString(Button.PRIMARY_FIRE), buttonString(Button.SECONDARY_FIRE), "Back to point : {0}{1}\n{2}".format(buttonString(Button.ULTIMATE), " / Spray Up" if EditMode else "", "Free Mode : {0} + {1}\n{2}".format(buttonString(Button.RELOAD), buttonString(Button.MELEE), "3rd Person : {0} + {1}\n{2}".format(buttonString(Button.RELOAD), buttonString(Button.JUMP), "Spectator Mode : {0} + {1}{2}".format(buttonString(Button.ULTIMATE), buttonString(Button.ABILITY_2), "" if EditMode and localPlayer == hostPlayer else "\nRestart : {0} + {1} + {2}".format(buttonString(Button.CROUCH), buttonString(Button.ABILITY_2), buttonString(Button.INTERACT))))))), HudPosition.RIGHT, 100, null, null, rgb(205, 209, 211), HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
     hudText([player for player in ShowHotKeyPlayers if player.freeMode or player.finished], null, "－－－－－－－－－－－－－－－－－－－－{0}{1}".format("－－－－" if "{0}".format(Hero.MERCY) == "Mercy" else (("－－－－－" if strLen(buttonString(Button.INTERACT)) > 5 else "－－－") if strLen(buttonString(Button.INTERACT)) > 3 else "－－") if strLen(buttonString(Button.INTERACT)) > 1 else "", "－－－－－－－－－－－－－" if "{0}".format(Hero.MERCY) == "マーシー" else "－－－－－－－－－－" if "{0}".format(Hero.MERCY) == "慈悲" else ""), ("앞으로 텔포 : Hold {0}\n{1}".format(buttonString(Button.RELOAD), "발키리 해제 : 음성 \"{0}\"\n{1}".format(l"Sorry", "임시 CP 설정 : 두 번 탭 {0}{1}".format(buttonString(Button.ABILITY_2), "" if EditMode and localPlayer == hostPlayer else "\n상대에게 텔포 : {0}{1}".format(buttonString(Button.INTERACT), "\n상대 레벨로 이동 : {0} + {1}".format(buttonString(Button.INTERACT), buttonString(Button.RELOAD)) if EditMode or (Cheat and (not FinishedCheat or localPlayer.bestRecord)) or localPlayer.playerTittle else ""))))) if "{0}".format(Hero.MERCY) == "메르시" else "Cancel Movement collision : Hold {0}\n{1}".format(buttonString(Button.RELOAD), "Interrupt Valkyrie : Voice Line \"Sorry\"\n{0}".format("Set Temporary cp : Double click {0}{1}".format(buttonString(Button.ABILITY_2), "" if EditMode and localPlayer == hostPlayer else "\nTo player's position : {0}{1}".format(buttonString(Button.INTERACT), "\nTo player's level : {0} + {1}".format(buttonString(Button.INTERACT), buttonString(Button.RELOAD)) if EditMode or (Cheat and (not FinishedCheat or localPlayer.bestRecord)) or localPlayer.playerTittle else "")))), HudPosition.RIGHT, 101, null, rgb(205, 209, 211), rgba(205, 209, 211, 175), HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
     hudText([player for player in ShowHotKeyPlayers if EditMode and player != hostPlayer or (not EditMode and (Cheat and (not FinishedCheat or player.bestRecord) or player.playerTittle))], null, "－－－－－－－－－－－－－－－－－－－－{0}{1}".format("－－－－" if "{0}".format(Hero.MERCY) == "Mercy" else (("－－－－－" if strLen(buttonString(Button.INTERACT)) > 5 else "－－－") if strLen(buttonString(Button.INTERACT)) > 3 else "－－") if strLen(buttonString(Button.INTERACT)) > 1 else "", "－－－－－－－－－－－－－" if "{0}".format(Hero.MERCY) == "マーシー" else "－－－－－－－－－－" if "{0}".format(Hero.MERCY) == "慈悲" else ""), "Next level : {0} + {1} + {2}".format(buttonString(Button.ABILITY_2), buttonString(Button.MELEE), "{0}\nPrev Level : {1} + {2}".format(buttonString(Button.PRIMARY_FIRE), buttonString(Button.ABILITY_2), "{0} + {1}".format(buttonString(Button.MELEE), buttonString(Button.SECONDARY_FIRE)))), HudPosition.RIGHT, 102, null, rgba(205, 209, 211, 175), Color.ORANGE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
@@ -2185,7 +2134,8 @@ def CreateGlobalHUD():
             hudText(getAllPlayers() if Top5[evalOnce(I)] else null, heroIcon(Hero.WIDOWMAKER), "{0} {1}".format(["1st", "2nd", "3rd", "4th", "5th"][evalOnce(I)], Top5[evalOnce(I)][0]), "{0} sec".format(Top5[evalOnce(I)][1]), HudPosition.LEFT, -990 + I, Top5Color[I], Top5Color[I], Top5Color[I], HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
         hudSubtext(getAllPlayers(), " ", HudPosition.LEFT, -901, null, HudReeval.VISIBILITY, SpecVisibility.DEFAULT)
         #HighLights
-        hudSubtext(getAllPlayers() if any([player.bestRecord and Top5.index("{0}".format(player.playerNickname)) < 0 for player in getAllPlayers()]) else null, Config[26], HudPosition.LEFT, -900, Config[27], HudReeval.VISIBILITY, SpecVisibility.DEFAULT)
+        hudSubtext(getAllPlayers() if any([player.bestRecord and Top5.index("{0}".format(player.playerNickname)) < 0 for player in getAllPlayers()]) else null, Config[26], HudPosition.LEFT, -1 * 900, Config[27], HudReeval.VISIBILITY, SpecVisibility.DEFAULT)
+        hudSubtext(getAllPlayers(), "{0}  {1}".format(abilityIconString(Hero.WIDOWMAKER, Button.ABILITY_2), "Uses Modded Mercy Parkour Editor\nOriginal Editor Code (by Peace): T6QQT\nModded Editor Code: J1ANR"), HudPosition.LEFT, -997, rgba(220, 220, 220, 200), HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
         hudSubtext(getAllPlayers(), " ", HudPosition.LEFT, -996, null, HudReeval.VISIBILITY, SpecVisibility.DEFAULT)
     else:
         hudText(hostPlayer, null, ["", "Controls: Checkpoint", "Controls: Orb", "Controls: Sphere", "Controls: Cloud"][hostPlayer.editMode], ["", "Create Point | Interact + Primary Fire\nInsert Point | Interact + Melee{0}".format("\nSelect Point | E + Primary / Secondary Fire\nMove Point | Interact + E\nSwitch Crouch | Interact + Crouch"), "Create Orb | Interact + Primary Fire\nSelect Orb | E + Primary / Secondary Fire{0}".format("\nMove Position | Reload + Primary / Secondary Fire\nCreate Bot | Melee + Primary Fire\nDelete Bot | Melee + Secondary Fire"), "Create Sphere | Interact + Primary Fire\nSelect Sphere | E + Primary / Secondary {0}".format("Fire\nMove Position | Reload + Primary / Secondary Fire\nAdjust Radius | Jump + Primary / Secondary Fire"), "Create Cloud | Interact + Primary Fire\nSelect Cloud | E + Primary / Secondary Fire{0}".format("\nMove Position | Reload + Primary / Secondary Fire\nAdjust Level | Jump + Primary / Secondary Fire")][hostPlayer.editMode], HudPosition.LEFT, 100, null, Color.WHITE, Color.TURQUOISE, HudReeval.VISIBILITY_SORT_ORDER_STRING_AND_COLOR, SpecVisibility.DEFAULT)
@@ -2218,27 +2168,26 @@ def CreatePlayerHUDAndEffects():
         destroyHudText(getLastCreatedText())
     createInWorldText(getAllPlayers(), "{0}  {1}".format(eventPlayer.playerNickname, eventPlayer.checkpoint if EditMode else eventPlayer.displayedCheckpoint), eventPlayer, 1.3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, eventPlayer.playerColor, SpecVisibility.DEFAULT)
     hudSubtext(eventPlayer, "{0} {1} / {2}".format(Config[13], eventPlayer.checkpoint if EditMode else eventPlayer.displayedCheckpoint, "{0}{1}{2}".format(len(Checkpoint) - 1 if EditMode else evalOnce((len([player for player in Checkpoint if not player[5]])) - 1), " [{0}]".format((len([player for player in Checkpoint if not player[5]])) - 1) if EditMode and any([player[5] for player in Checkpoint]) else "", TipHudSpaceHolder[0])), HudPosition.TOP, 1, Config[14], HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-    createEffect(eventPlayer if eventPlayer.checkpointA[0] and (EditMode or eventPlayer.checkpointB[0]) else null, Effect.RING, Config[10] if eventPlayer.checkpointA[5] else Config[0], eventPlayer.checkpointA[0], eventPlayer.checkpointA[1], EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
+    createEffect(eventPlayer if eventPlayer.checkpointA[0] and (EditMode or eventPlayer.checkpointB[0]) else null, Effect.RING, Config[0] if not eventPlayer.checkpointA[5] else Config[10], eventPlayer.checkpointA[0], eventPlayer.checkpointA[1], EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
     createIcon(eventPlayer if eventPlayer.checkpointA[3][0] and eventPlayer.editMode != 2 and not eventPlayer.nearestOrb or eventPlayer.nearestOrb[1] else null, eventPlayer.targetBot if eventPlayer.targetBot.isAlive() else eventPlayer.targetBot.getPosition() + vect(0, 2, 0), Icon.ARROW_DOWN, IconReeval.VISIBILITY_POSITION_AND_COLOR, Config[1] if eventPlayer.checkpointA[2] and not eventPlayer.nearestOrb[1] else Color.RED, true)
     createInWorldText(eventPlayer if eventPlayer.checkpointB[0] else null, Config[2], eventPlayer.checkpointB[0] + vect(0, 0.2, 0), Config[3], Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Config[4], SpecVisibility.DEFAULT)
     createIcon(eventPlayer if eventPlayer.checkpointB[0] else null, eventPlayer.checkpointB[0] + vect(0, 1.3, 0), Icon.FLAG, IconReeval.VISIBILITY_AND_POSITION, Config[5], true)
-    createEffect(eventPlayer if eventPlayer.checkpointB[0] else null, Effect.RING, Config[10] if eventPlayer.checkpointB[5] else Config[7], eventPlayer.checkpointB[0], eventPlayer.checkpointB[1], EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
+    createEffect(eventPlayer if eventPlayer.checkpointB[0] else null, Effect.RING, Config[7] if not eventPlayer.checkpointB[5] else Config[10], eventPlayer.checkpointB[0], eventPlayer.checkpointB[1], EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
     if Config[8] == 0:
-        createEffect(eventPlayer if eventPlayer.checkpointB[0] else null, Effect.LIGHT_SHAFT, Config[9] if eventPlayer.checkpointB[5] else Config[6], eventPlayer.checkpointB[0], eventPlayer.checkpointB[1], EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
+        createEffect(eventPlayer if eventPlayer.checkpointB[0] else null, Effect.LIGHT_SHAFT, Config[6] if not eventPlayer.checkpointB[5] else Config[9], eventPlayer.checkpointB[0], eventPlayer.checkpointB[1], EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
     elif Config[8] == 1:
-        createEffect(eventPlayer if eventPlayer.checkpointB[0] else null, Effect.SPARKLES, Config[9] if eventPlayer.checkpointB[5] else Config[6], eventPlayer.checkpointB[0], eventPlayer.checkpointB[1], EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
+        createEffect(eventPlayer if eventPlayer.checkpointB[0] else null, Effect.SPARKLES, Config[6] if not eventPlayer.checkpointB[5] else Config[9], eventPlayer.checkpointB[0], eventPlayer.checkpointB[1], EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
     elif Config[8] == 2:
-        createEffect(eventPlayer if eventPlayer.checkpointB[0] else null, Effect.CLOUD, Config[9] if eventPlayer.checkpointB[5] else Config[6], eventPlayer.checkpointB[0], eventPlayer.checkpointB[1], EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
+        createEffect(eventPlayer if eventPlayer.checkpointB[0] else null, Effect.CLOUD, Config[6] if not eventPlayer.checkpointB[5] else Config[9], eventPlayer.checkpointB[0], eventPlayer.checkpointB[1], EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
     else:
-        createEffect(eventPlayer if eventPlayer.checkpointB[0] else null, Effect.BAD_AURA, Config[9] if eventPlayer.checkpointB[5] else Config[6], eventPlayer.checkpointB[0], eventPlayer.checkpointB[1], EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
+        createEffect(eventPlayer if eventPlayer.checkpointB[0] else null, Effect.BAD_AURA, Config[6] if not eventPlayer.checkpointB[5] else Config[9], eventPlayer.checkpointB[0], eventPlayer.checkpointB[1], EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
     if not EditMode:
-        hudText(getAllPlayers() if eventPlayer.bestRecord and Top5.index(eventPlayer.playerNickname) < 0 else null, heroIcon(Hero.WIDOWMAKER), eventPlayer.playerNickname, "{0}s".format(eventPlayer.bestRecord), HudPosition.LEFT, eventPlayer.bestRecord / 100, Config[28], Config[28], Config[28], HudReeval.VISIBILITY_SORT_ORDER_AND_STRING, SpecVisibility.DEFAULT)
+        hudText(getAllPlayers() if eventPlayer.bestRecord and Top5.index(eventPlayer.playerNickname) < 0 else null, heroIcon(Hero.MERCY), eventPlayer.playerNickname, "{0} sec".format(eventPlayer.bestRecord), HudPosition.LEFT, eventPlayer.bestRecord / 100, Config[28], Config[28], Config[28], HudReeval.VISIBILITY_SORT_ORDER_AND_STRING, SpecVisibility.DEFAULT)
         hudSubheader(eventPlayer, "Previous Segment: {0} {1}".format(eventPlayer.segmentTimeArray[eventPlayer.checkpoint - 1] if eventPlayer.checkpoint else "N/A", "({0})".format(eventPlayer.segmentVsPersonalBestArray[eventPlayer.checkpoint - 1]) if eventPlayer.checkpoint and eventPlayer.personalBestArray else ""), HudPosition.RIGHT, 1, (rgb(255, 215, 0) if eventPlayer.segmentTimeArray[eventPlayer.checkpoint - 1] <= eventPlayer.bestSegmentsArray[eventPlayer.checkpoint - 1] else Color.GREEN if eventPlayer.segmentTimeArray[eventPlayer.checkpoint - 1] <= eventPlayer.personalBestArray[eventPlayer.checkpoint - 1] else Color.RED) if eventPlayer.checkpoint and eventPlayer.personalBestArray else Color.GREEN, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
-        hudSubheader(eventPlayer, "Running Total vs PB: {0}s".format(eventPlayer.vsPersonalBestRunningTally) if eventPlayer.checkpoint and eventPlayer.personalBestArray else "", HudPosition.RIGHT, 1, Color.GREEN if eventPlayer.vsPersonalBestRunningTally <= 0 else Color.RED, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
+        hudSubheader(eventPlayer, "Running Total vs pb: {0}".format(eventPlayer.vsPersonalBestRunningTally) if eventPlayer.checkpoint and eventPlayer.personalBestArray else "", HudPosition.RIGHT, 1, Color.GREEN if eventPlayer.vsPersonalBestRunningTally <= 0 else Color.RED, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
         hudSubheader(eventPlayer, "Sum of Best: {0}".format(eventPlayer.sumOfBestSegments) if eventPlayer.personalBestArray else "", HudPosition.RIGHT, 1, rgb(150, 230, 210), HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-        hudHeader(eventPlayer if Tips[eventPlayer.displayedCheckpoint] and not eventPlayer.freeMode and not eventPlayer.finished else null, "{0} : {1}".format(abilityIconString(Hero.KIRIKO, Button.ULTIMATE), Tips[eventPlayer.displayedCheckpoint]), HudPosition.TOP, 100, rgba(248, 200, 220, 170), HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-        hudSubtext(eventPlayer, "Mistakes: {0} Times\nTime: {1} Seconds".format("Not running!" if eventPlayer.cheat else eventPlayer.mistake, "Not running!" if eventPlayer.cheat else eventPlayer.time), HudPosition.RIGHT, 0, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-
+        hudHeader(eventPlayer if Tips[eventPlayer.displayedCheckpoint] and not eventPlayer.freeMode and not eventPlayer.finished else null, "{0} :                          \n  {1}\n".format(heroIcon(Hero.MERCY), Tips[eventPlayer.displayedCheckpoint]), HudPosition.TOP, 100, Color.TURQUOISE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+        hudSubtext(eventPlayer, "Mistakes: {0} Times\nTime: {1} Seconds".format("∞" if eventPlayer.cheat else eventPlayer.mistake, "∞" if eventPlayer.cheat else eventPlayer.time), HudPosition.RIGHT, 0, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
 def TeleportToCurrentCheckoint():
     @Name "Subroutine TeleportToCurrentCheckoint (Originally from peace's mercy parkour editor: T6QQT)"
@@ -2292,6 +2241,7 @@ def SetCurrentAbilities():
 
 
 def TeleportCurrentBot():
+    #double check this one for the outline bug
     @Name "Subroutine TeleportCurrentBot (Originally from peace's mercy parkour editor: T6QQT)"
     
     eventPlayer.targetBot.teleport(eventPlayer.checkpointA[3][0] if eventPlayer.checkpointA[3][0] else Config[60])
@@ -2304,7 +2254,7 @@ def DisplayCurrentAbilityMsgs():
     if eventPlayer.checkpointA[5] or not eventPlayer.checkpointB:
         return
     if len(eventPlayer.currentOrb) > 0:
-        smallMessage(eventPlayer, Config[20] if Config[20] else "This level has {0} orb(s) to get".format(len(eventPlayer.currentOrb)))
+        smallMessage(eventPlayer, Config[20] if Config[20] else "This level has {0} orb to get".format(len(eventPlayer.currentOrb)))
     if not eventPlayer.checkpointA[3][0]:
         smallMessage(eventPlayer, Config[19])
     else:
@@ -2388,9 +2338,9 @@ def DisplayCurrentCustomSmallMsgs():
     if SmallMessages[eventPlayer.displayedCheckpoint] and not eventPlayer.checkpointA[5]:
         eventPlayer.currentSmallMessage = [i for i in SmallMessages[eventPlayer.displayedCheckpoint] if i]
         while len(eventPlayer.currentSmallMessage) > 0:
-            wait(5)
+            wait(0.5)
             smallMessage(eventPlayer, eventPlayer.currentSmallMessage[0])
-            wait(10)
+            wait(2.3)
             del eventPlayer.currentSmallMessage[0]
 
 
@@ -2410,7 +2360,7 @@ def CancelAbilityAndMomentum():
     eventPlayer.cancelPrimaryAction()
     eventPlayer.applyImpulse(Vector.UP, 0, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
     wait(0.016, Wait.RESTART_WHEN_TRUE)
-    eventPlayer.applyImpulse(normalize(eventPlayer.getVelocity()) * -1, eventPlayer.getSpeed(), Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
+    eventPlayer.applyImpulse(normalize(eventPlayer.getVelocity()) * -1 * 1, eventPlayer.getSpeed(), Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
 
 
 def ValidationPlayerData():
@@ -2442,8 +2392,8 @@ def TempSavePlayerData():
             eventPlayer.playerData = [_ for _, i in PlayersData[eventPlayer.dataIndex] if i != 0]
             eventPlayer.playerData.append(eventPlayer.displayedCheckpoint)
             if not eventPlayer.finished:
-                smallMessage(eventPlayer, "Timer paused, return to level {0} again to continue timing.".format(eventPlayer.playerData[3]))
-                bigMessage(eventPlayer, "Use the voice line \"Need Help\" to return to level {0}.".format(eventPlayer.playerData[3]))
+                smallMessage(eventPlayer, "Timer paused, Return to the level {0} again to continue timing >_<".format(eventPlayer.playerData[3]))
+                bigMessage(eventPlayer, "\"Need Help\", Return to level {0}".format(eventPlayer.playerData[3]))
         if eventPlayer.finished:
             eventPlayer.bodySize = 1
             eventPlayer.startForcingHero(Hero.WIDOWMAKER)
@@ -2469,7 +2419,7 @@ def SkipOrBackCheckpoint():
             eventPlayer.time = eventPlayer.playerData[1]
             eventPlayer.mistake = eventPlayer.playerData[2]
             if eventPlayer.checkpoint != 0 or eventPlayer.playerData[3] == 0:
-                smallMessage(eventPlayer, "You have returned to level {0}, taking an action will continue the time.".format(eventPlayer.playerData[3]))
+                smallMessage(eventPlayer, "You have returned to level {0}, Leave the checkpoint and continue timing!".format(eventPlayer.playerData[3]))
         else:
             eventPlayer.cheat = true
     eventPlayer.teleport(Checkpoint[eventPlayer.checkpoint][0])
@@ -2499,8 +2449,8 @@ def PlayDestroyMapEffect():
         playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.SKY_BLUE, Chase, 3)
         wait()
     for I in range(400):
-        playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.PURPLE, (nearestWalkablePosition(vect(999, 999, 999)) + nearestWalkablePosition(vect(-999, -999, -999))) / 2 + (angleToDirection(random.uniform(0, 360), 0) * (random.randint(0, I + 1))), random.randint(I / 5, I))
-        playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ROSE, (nearestWalkablePosition(vect(999, 999, 999)) + nearestWalkablePosition(vect(-999, -999, -999))) / 2 + (angleToDirection(random.uniform(0, 360), 0) * (random.randint(0, I + 1))), I)
+        playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, (nearestWalkablePosition(vect(999, 999, 999)) + nearestWalkablePosition(vect(-999, -999, -999))) / 2 + (angleToDirection(random.uniform(0, 360), 0) * (random.randint(0, (I + 1) / 1))), random.randint(I / 5, I))
+        playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, (nearestWalkablePosition(vect(999, 999, 999)) + nearestWalkablePosition(vect(-999, -999, -999))) / 2 + (angleToDirection(random.uniform(0, 360), 0) * (random.randint(0, (I + 1) / 1))), I)
         wait()
 
 
@@ -2516,13 +2466,14 @@ rule "Redirect damage to attacker's bot (I made this *smile*)":
             heal(victim, null, eventDamage)
         if distance(victim, eventPlayer.targetBot) <= 1:
             damage(eventPlayer.targetBot, eventPlayer, eventDamage)
+            #eventPlayer.recentDamage = eventDamage
         else:
             if eventDamage >= 100:
-                smallMessage(eventPlayer, "You are shooting someone else's target.")
+                smallMessage(eventPlayer, "you are shooting the wrong zen")
     else:
         if not eventDamage > 300:
             eventPlayer.recentDamage = eventDamage
-        if eventPlayer.targetBot.getHealth() <= eventPlayer.targetBot.getMaxHealth() - eventPlayer.editModeCharacterResetted:
+        if eventPlayer.targetBot.getHealth() <= eventPlayer.targetBot.getMaxHealth() - eventPlayer.trueBotHealth:
             kill(eventPlayer.targetBot, eventPlayer)
 
 
@@ -2532,39 +2483,44 @@ rule "Prevent killing the bot from starting cp":
     @Condition distance(eventPlayer, eventPlayer.checkpointA[0]) < eventPlayer.checkpointA[1]
     
     if victim.isDead():
-        smallMessage(eventPlayer, "You can't kill the target from the starting checkpoint.")
+        smallMessage(eventPlayer, "You can't kill zen from the starting CP.")
         victim.resurrect()
         heal(victim, null, 1000)
     else:
         heal(victim, null, eventDamage)
 
 
-rule "end of run segments ui":
+/*
+rule "Rule 101":
+    hudText(getAllPlayers(), getServerLoad(), getPeakServerLoad(), getAverageServerLoad(), HudPosition.LEFT, 0, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+*/
+
+rule "Rule 102":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.isAlive() == true
     @Condition eventPlayer.checkpoint == len(Checkpoint) - 1
     @Condition EditMode == false
     
-    eventPlayer.segmentTimeString = "This Run's Segments:"
+    eventPlayer.segmentTimeString = "This Run Segments:"
     for eventPlayer.segmentTimeArrayCounter in range(len(eventPlayer.segmentTimeArray)):
-        eventPlayer.segmentTimeString = "{0}\r\nCheckpoint {1}: {2}".format(eventPlayer.segmentTimeString, eventPlayer.segmentTimeArrayCounter, eventPlayer.segmentTimeArray[eventPlayer.segmentTimeArrayCounter])
+        eventPlayer.segmentTimeString = "{0}\r\nCheckpoint {2}: {1}".format(eventPlayer.segmentTimeString, eventPlayer.segmentTimeArray[eventPlayer.segmentTimeArrayCounter], eventPlayer.segmentTimeArrayCounter)
     eventPlayer.segmentTimeString = "{0}\r\nTotal Time: {1}".format(eventPlayer.segmentTimeString, eventPlayer.time)
     if eventPlayer.time <= eventPlayer.bestRecord:
         if eventPlayer.time <= FirstPlaceTime:
-            FirstPlaceTimeString = "1st Place Segments:"
+            FirstPlaceTimeString = "1ST Place Segments:"
             for eventPlayer.segmentTimeArrayCounter in range(len(eventPlayer.segmentTimeArray)):
-                FirstPlaceTimeString = "{0}\r\nCheckpoint {1}: {2}".format(FirstPlaceTimeString, eventPlayer.segmentTimeArrayCounter, FirstPlaceTimeArray[eventPlayer.segmentTimeArrayCounter])
+                FirstPlaceTimeString = "{0}\r\nCheckpoint {2}: {1}".format(FirstPlaceTimeString, FirstPlaceTimeArray[eventPlayer.segmentTimeArrayCounter], eventPlayer.segmentTimeArrayCounter)
             FirstPlaceTimeString = "{0}\nTotal Time: {1}".format(FirstPlaceTimeString, FirstPlaceTime)
         eventPlayer.personalBestString = "Personal Best Segments:"
         for eventPlayer.segmentTimeArrayCounter in range(len(eventPlayer.segmentTimeArray)):
-            eventPlayer.personalBestString = "{0}\r\nCheckpoint {1}: {2}".format(eventPlayer.personalBestString, eventPlayer.segmentTimeArrayCounter, eventPlayer.personalBestArray[eventPlayer.segmentTimeArrayCounter])
+            eventPlayer.personalBestString = "{0}\r\nCheckpoint {2}: {1}".format(eventPlayer.personalBestString, eventPlayer.personalBestArray[eventPlayer.segmentTimeArrayCounter], eventPlayer.segmentTimeArrayCounter)
         eventPlayer.personalBestString = "{0}\r\nTotal Time: {1}".format(eventPlayer.personalBestString, eventPlayer.time)
     #wait(5)
     if not eventPlayer.bestSegmentsArrayString:
         eventPlayer.bestSegmentsArrayString = "Best Segments (Across Your Runs):"
         for eventPlayer.segmentTimeArrayCounter in range(len(eventPlayer.segmentTimeArray)):
-            eventPlayer.bestSegmentsArrayString = "{0}\r\nCheckpoint {1}: {2}".format(eventPlayer.bestSegmentsArrayString, eventPlayer.segmentTimeArrayCounter, eventPlayer.bestSegmentsArray[eventPlayer.segmentTimeArrayCounter])
+            eventPlayer.bestSegmentsArrayString = "{0}\r\nCheckpoint {2}: {1}".format(eventPlayer.bestSegmentsArrayString, eventPlayer.bestSegmentsArray[eventPlayer.segmentTimeArrayCounter], eventPlayer.segmentTimeArrayCounter)
         eventPlayer.bestSegmentsArrayString = "{0}\r\nTotal Time: {1}".format(eventPlayer.bestSegmentsArrayString, eventPlayer.sumOfBestSegments if eventPlayer.personalBestArray else "N/A")
 
 
@@ -2578,18 +2534,5 @@ rule "changing hero (hit need healing comms button) - ty to felicity for the cod
     wait(0.25)
     eventPlayer.editModeCharacterResetted = 1
     eventPlayer.resetHeroAvailability()
-
-
-rule "Small message text (Originally from peace's mercy parkour editor: T6QQT)":
-    SmallMessages[0] = "Bonk!"
-
-
-rule "Put the data here (Originally from peace's mercy parkour editor: T6QQT)":
-    Checkpoint = [[vect(-53.193, -4.161, 77.688), 1.6, true, [vect(-101.85, 2.02, 42.091), false, true], false, false, [], [], []]]
-
-
-rule "HUD guidance text (Originally from peace's mercy parkour editor: T6QQT)":
-    Tips[0] = ""
-    Tips[1] = ""
 
 

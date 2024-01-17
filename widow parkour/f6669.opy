@@ -1,3 +1,5 @@
+#Checkpoint: Gibraltar by Felicity
+
 #Global variables
 
 globalvar EditMode 0
