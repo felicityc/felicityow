@@ -1,153 +1,3 @@
-settings {
-    "main": {
-        "description": "Modded by Bouncybear99 and NotFleta \r|\nEditing and PR by Felicity \r|\nOriginal made by AlexHouk and Koenig \r|\n\r\nUpdated 9th Jan 2024 | Code: 8M06P |\nJoin the discord for the full changelog\r \r|\nor if you want to discuss the game mode! \r|\nhttps://discord.gg/gvH9h37K5z",
-        "modeName": "The Eternal Arena v3"
-    },
-    "lobby": {
-        "mapRotation": "afterGame",
-        "team1Slots": 6,
-        "team2Slots": 0,
-        "returnToLobby": "never"
-    },
-    "gamemodes": {
-        "skirmish": {
-            "enabledMaps": [
-                "workshopIslandNight"
-            ]
-        },
-        "general": {
-            "enableHeroSwitching": false,
-            "enableKillFeed": false
-        }
-    },
-    "heroes": {
-        "team1": {
-            "baptiste": {
-                "ability2Cooldown%": 150
-            },
-            "dva": {
-                "secondaryFireMaximumTime%": 200,
-                "secondaryFireRechargeRate%": 200
-            },
-            "mauga": {
-                "healingReceived%": 33
-            },
-            "mercy": {
-                "ability2Cooldown%": 200
-            },
-            "general": {
-                "movementSpeed%": 115
-            }
-        },
-        "team2": {
-            "ana": {
-                "ability2Cooldown%": 85,
-                "ability1Cooldown%": 85
-            },
-            "baptiste": {
-                "ability2Cooldown%": 80,
-                "ability1Cooldown%": 60
-            },
-            "brigitte": {
-                "enableSecondaryFire": false,
-                "secondaryFireRechargeRate%": 0,
-                "healingDealt%": 25,
-                "enableUlt": false,
-                "enableAbility1": false
-            },
-            "mccree": {
-                "ability1Cooldown%": 60
-            },
-            "hanzo": {
-                "ability2Cooldown%": 60,
-                "ability2Quantity%": 7
-            },
-            "junkrat": {
-                "ability1Cooldown%": 50
-            },
-            "mauga": {
-                "ability2Cooldown%": 150,
-                "healingReceived%": 33,
-                "primaryFireIgniteDamage": 0,
-                "primaryFireIgniteDuration": 0,
-                "primaryFireIgniteRate": 0,
-                "movementSpeed%": 75,
-                "ability1Cooldown%": 200,
-                "ability1Kb%": 40,
-                "enableUlt": false,
-                "enableSecondaryFire": false
-            },
-            "mei": {
-                "ultFreezeRate%": 50,
-                "healingReceived%": 40,
-                "primaryFireFreezeDuration%": 40,
-                "primaryFireFreezeRate%": 35
-            },
-            "moira": {
-                "ability2Cooldown%": 60,
-                "ability2MaxDamage%": 200,
-                "ability1Cooldown%": 83,
-                "healingReceived%": 40
-            },
-            "pharah": {
-                "secondaryFireMaximumTime%": 80,
-                "ability1Cooldown%": 125
-            },
-            "reinhardt": {
-                "enableSecondaryFire": false,
-                "ability1Cooldown%": 200
-            },
-            "sigma": {
-                "ability2Cooldown%": 80,
-                "secondaryFireCooldown%": 150,
-                "secondaryFireRechargeRate%": 0,
-                "ability1Cooldown%": 125
-            },
-            "soldier": {
-                "ability2Cooldown%": 60,
-                "healingDealt%": 150
-            },
-            "sombra": {
-                "secondaryFireCooldown%": 150
-            },
-            "winston": {
-                "ability2Cooldown%": 200,
-                "enableUlt": false
-            },
-            "hammond": {
-                "enableAbility2": false
-            },
-            "general": {
-                "damageDealt%": 500,
-                "healingDealt%": 25,
-                "healingReceived%": 25,
-                "health%": 500,
-                "movementSpeed%": 80
-            }
-        },
-        "allTeams": {
-            "genji": {
-                "ability1Cooldown%": 75
-            },
-            "torbjorn": {
-                "ability1Cooldown%": 200,
-                "health%": 100,
-                "ability2Duration%": 50,
-                "projectileSpeed%": 225
-            },
-            "zarya": {
-                "ability1Cooldown%": 140,
-                "ability2Cooldown%": 140
-            },
-            "general": {
-                "abilityCooldown%": 67,
-                "combatUltGen%": 0,
-                "passiveUltGen%": 0
-            }
-        }
-    }
-}
-
 #Global variables
 
 globalvar AspectNames 0
@@ -257,8 +107,10 @@ playervar DefiantMod 31
 playervar dodgeChanceMulti 32
 playervar chunkyKillCounter 33
 playervar TriageLevel 34
+playervar AllStats 35
 playervar healingTextTimer 36
 playervar secondWindTimer 37
+playervar Lover 38
 playervar baseMaxAmmo2 39
 playervar powerupDamageMod 40
 playervar powerupEffect 41
@@ -310,8 +162,7 @@ playervar Ion 90
 playervar Death 91
 playervar miniboss 92
 playervar UsingAspect 93
-playervar AllStats 94
-playervar Lover 95
+
 
 #Subroutine names
 
@@ -320,17 +171,6 @@ subroutine RecalculateStats 0
 
 #Activated extensions
 
-#!extension beamEffects
-#!extension beamSounds
-#!extension buffStatusEffects
-#!extension debuffStatusEffects
-#!extension buffAndDebuffSounds
-#!extension energyExplosionEffects
-#!extension kineticExplosionEffects
-#!extension explosionSounds
-#!extension playMoreEffects
-#!extension spawnMoreDummyBots
-#!extension projectiles
 #!extension energyExplosionEffects
 #!extension explosionSounds
 #!extension buffAndDebuffSounds
@@ -5478,15 +5318,15 @@ rule "Automatic Ult Callouts":
 
 rule "Perk names and descriptions":
     PerkLevelNames = ["I", "II", "III", "EX"]
-    PerkNames = ["Unstoppable", "Head Hunter", "Bulletstorm", "Defiant", "Shadow Dancer", "Giant's Genes", "Triage", "Motivated", "Holy Radiance", "Meta", "Second Wind", "Space-time Distortion", "Special Delivery", "Aspect's Avatar", "Aura of Thorns", "Saintly Grace", "Vampire", "Armored Carapace", "Soul Hearth", "Experienced", "Final Judgment", "Shield Generator", "Helping Hand", "Fate's Thread", "Hospitality", "Care Package", "Agility", "Wish", "Assist Fire", "IV The Lovers"]
+    PerkNames = ["Unstoppable", "Head Hunter", "Bulletstorm", "Defiant", "Shadow Dancer", "Giant's Genes", "Triage", "Motivated", "Holy Radiance", "Meta", "Second Wind", "Space-time Distortion", "Special Delivery", "Aspect's Avatar", "Aura of Thorns", "Saintly Grace", "Vampire", "Armored Carapace", "Soul Hearth", "Experienced", "Final Judgment", "Shield Generator", "Helping Hand", "Fate's Thread", "Hospitality", "Care Package", "Agility", "Wish", "Assist Fire"]
     PerkDescription = [["Killing blows heal you by 10% max HP and reduce all cooldowns by 1 second", "Killing blows heal you by 20% max HP and reduce all cooldowns by 2 seconds", "Killing blows heal you by 40% max HP and reduce all cooldowns by 4 seconds", "Killing blows fully heal you and reset all cooldowns"], ["head shots deal +20% damage", "head shots deal +40% damage", "head shots deal +80% damage", "head shots deal +150% damage and stun enemies for 0.25s"], ["increase max ammo capacity by 50%", "increase max ammo capacity by 100%", "increase max ammo capacity by 200%", "gain infinite ammo"], ["take 40% less damage while below 35% hp", "take 55% less damage while below 35% hp", "take 70% less damage while below 35% hp", "take 75% less damage while below 60% hp"], ["30% chance to roll for an additional dodge chance", "60% chance to roll for an additional dodge chance", "Roll for dodge chance twice.", "Roll for dodge chance 2.4 times."], ["each elimination gives +0.2% max hp and increases your size", "each elimination gives +0.4% max hp and increases your size", "each elimination gives +0.7% max hp and increases your size", "each elimination gives +1% max hp and increases your size"], ["heal 30% more to allies below 50% hp", "heal 60% more to allies below 50% hp", "heal 120% more to allies below 50% hp", "heal 150% more to all allies"], ["your ultimate charges 25% faster", "your ultimate charges 40% faster", "your ultimate charges 60% faster", "your ultimate charges 75% faster"], ["damage nearby enemies by 20% of your healing", "damage nearby enemies by 40% of your healing", "damage nearby enemies by 100% of your healing", "damage enemies in large radius by 200% of your healing"], ["end each wave with 40% chance gain a random Stat up", "end each wave with 70% chance gain a random Stat up", "after each wave gain a random Stat up", "after each wave gain a random Stat up\r\nand gift one to a random ally"], ["revive yourself upon dying with a 50% chance, once per wave", "revive yourself upon dying, once per wave", "revive yourself upon dying, with cooldown of 80 seconds", "revive yourself upon dying, with cooldown of 30 seconds"], ["25% chance to reset ability cooldown on use", "40% chance to reset ability cooldown on use", "60% chance to reset ability cooldown on use", "75% chance to reset ability cooldown on use"], ["powerups spawn 10% more often. stacks over multiple players", "powerups spawn 20% more often. stacks over multiple players", "powerups spawn 30% more often. stacks over multiple players", "powerups spawn 65% more often. gain an extra reroll every 6 waves"], ["Your Aspect ability recharges 20% faster", "Your Aspect ability recharges 40% faster", "Your Aspect ability recharges 60% faster", "Your Aspect ability recharges 70% faster\r\nand is used automatically"], ["reflect 50% of damage taken to the attacker", "reflect 75% of damage taken to the attacker", "reflect 150% of damage taken to the attacker", "reflect 150% of damage taken to the attacker, scaling with defense"], ["healing allies charges their ultimate by up to 10%", "healing allies charges their ultimate by up to 15%", "healing allies charges their ultimate by up to 20%", "healing allies charges their ultimate by up to 30%"], ["Heal by 10% of damage you deal. Amount halved for Reaper.", "Heal by 20% of damage you deal. Amount halved for Reaper.", "Heal by 30% of damage you deal. Amount halved for Reaper.", "Heal by 40% of damage you deal. Amount halved for Reaper."], ["gain armor equal to 20% of your basic(white) health", "gain armor equal to 35% of your basic(white) health", "gain armor equal to 70% of your basic(white) health", "gain armor equal to 100% of your basic(white) health"], ["Increase health regen by 50%.", "Increase health regen by 100%.", "Increase health regen by 200%.", "Increase health regen by 200% and doubles the regen rate."], ["eliminations on elite enemies increases your damage by 0.2% per enemy tier", "eliminations on elite enemies increases your damage by 0.3% per enemy tier", "eliminations on elite enemies increases your damage by 0.5% per enemy tier", "eliminations on elite enemies increases your damage by 0.6% per enemy tier"], ["your attacks execute normal enemies under 7% health", "your attacks execute normal enemies under 10% health", "your attacks execute normal enemies under 15% health", "your attacks execute enemies and bosses under 20% health"], ["on an elimination, gain shields equal to 15% of max health.\r\ndoesn't stack", "on an elimination, gain shields equal to 25% of max health.\r\ndoesn't stack", "on an elimination, gain shields equal to 40% of max health.\r\ndoesn't stack", "on an elimination, gain shields equal to 75% of max health.\r\ndoesn't stack"], ["attacking enemy heals the most injured ally\r\nby 20% of damage dealt (2s cooldown)", "attacking enemy heals the most injured ally\r\nby 40% of damage dealt (1.25s cooldown)", "attacking enemy heals the most injured ally\r\nby 60% of damage dealt (0.75s cooldown)", "attacking enemy heals the most injured ally\r\nby 100% of damage dealt (0.4s cooldown)"], ["+1 reroll when defeating bosses", "+2 rerolls when defeating bosses", "+3 rerolls when defeating bosses", "unlimited rerolls"], ["assists on enemies give +0.1% healing", "assists on enemies give +0.2% healing", "assists on enemies give +0.4% healing", "assists on enemies give +0.7% healing"], ["gain an extra stat point every 5 waves", "gain 2 extra stat points every 5 waves", "gain 3 extra stat points every 5 waves", "gain 5 extra stat points every 5 waves"], ["move 15% faster", "move 30% faster", "move 50% faster", "move 80% faster"], ["Next Perk that you choose will become its EX version.\r\nCan only be obtained once."], ["on hit, with a 10% chance, fire a small homing projectile (1s cooldown)", "on hit, with a 20% chance, fire a small homing projectile (1s cooldown)", "on hit, with a 35% chance, fire a small homing projectile (1s cooldown)", "on hit, with a 60% chance, fire a small homing projectile (1s cooldown)"]]
     PerkColors = [Color.RED, Color.RED, Color.RED, Color.BLUE, Color.BLUE, Color.BLUE, Color.GREEN, Color.GREEN, Color.GREEN, Color.PURPLE, Color.PURPLE, Color.PURPLE, Color.PURPLE, Color.RED, Color.BLUE, Color.GREEN, Color.RED, Color.BLUE, Color.GREEN, Color.RED, Color.RED, Color.BLUE, Color.GREEN, Color.PURPLE, Color.GREEN, Color.PURPLE, Color.BLUE, Color.ORANGE, Color.RED]
     playersSaved = []
     playerData = []
     #Extra Items
-    PerkNames.append(["Apocalypse", "Smooth Moves", "Epic Backflip", "Pain Train", "Peer Pressure", "Fishing Frenzy", "Time Loop", "Constructive Criticism", "Food Coloring"])
-    PerkDescription.append([["+50% damage dealt during ultimate", "+100% damage dealt during ultimate", "+200% damage dealt during ultimate", "+300% damage dealt during ultimate"], ["Emoting charges your ultimate 2x faster", "Emoting charges your ultimate 3x faster", "Emoting charges your ultimate 4x faster", "Emoting charges your ultimate 5x faster"], ["Dodging has a 50% chance to charge ultimate by 1%.", "Dodging has a 75% chance to charge ultimate by 1%.", "Dodging always charges your ultimate by 1%.", "Dodging always charges your ultimate by 2%."], ["100% of knockback converted to AoE damage.", "200% of knockback converted to AoE damage.", "300% of knockback converted to AoE damage.", "400% of knockback converted to AoE damage."], ["Boost the damage of nearby allies by 15%", "Boost the damage of nearby allies by 25%", "Boost the damage of nearby allies by 50%", "Boost the damage of nearby allies by 75%"], ["Using your aspect reduces ally aspect cooldowns by 2 seconds", "Using your aspect reduces ally aspect cooldowns by 3 seconds", "Using your aspect reduces ally aspect cooldowns by 5 seconds", "Using your aspect reduces ally aspect cooldowns by 10 seconds"], ["Using abilities adds +1% CD Reduction. Resets each wave. ", "Using abilities adds +1.5% CD Reduction. Resets each wave.", "Using abilities adds +2% CD Reduction. Resets each wave.", "Using abilities adds +3% CD Reduction. Resets each wave."], ["+25% ability damage / healing", "+50% ability damage / healing", "+75% ability damage / healing", "+100% ability damage / healing"], ["0.1% of damage dealt granted as Ultimate Charge", "0.2% of damage dealt granted as Ultimate Charge", "0.3% of damage dealt granted as Ultimate Charge", "0.5% of damage dealt granted as Ultimate Charge", "When your random partner is alive, bonus to stats. When they are dead, severe penalty to stats."]])
-    PerkColors.append([Color.RED, Color.PURPLE, Color.BLUE, Color.RED, Color.GREEN, Color.GREEN, Color.PURPLE, Color.RED, Color.RED])
+    PerkNames.append(["Apocalypse", "Smooth Moves", "Epic Backflip", "Pain Train", "Peer Pressure", "Fishing Frenzy", "Time Loop", "Constructive Criticism", "Food Coloring", "The Lovers"])
+    PerkDescription.append([["+50% damage dealt during ultimate", "+100% damage dealt during ultimate", "+200% damage dealt during ultimate", "+300% damage dealt during ultimate"], ["Emoting charges your ultimate 2x faster", "Emoting charges your ultimate 3x faster", "Emoting charges your ultimate 4x faster", "Emoting charges your ultimate 5x faster"], ["Dodging has a 50% chance to charge ultimate by 1%.", "Dodging has a 75% chance to charge ultimate by 1%.", "Dodging always charges your ultimate by 1%.", "Dodging always charges your ultimate by 2%."], ["100% of knockback converted to AoE damage.", "200% of knockback converted to AoE damage.", "300% of knockback converted to AoE damage.", "400% of knockback converted to AoE damage."], ["Boost the damage of nearby allies by 15%", "Boost the damage of nearby allies by 25%", "Boost the damage of nearby allies by 50%", "Boost the damage of nearby allies by 75%"], ["Using your aspect reduces ally aspect cooldowns by 2 seconds", "Using your aspect reduces ally aspect cooldowns by 3 seconds", "Using your aspect reduces ally aspect cooldowns by 5 seconds", "Using your aspect reduces ally aspect cooldowns by 10 seconds"], ["Using abilities adds +1% CD Reduction. Resets each wave. ", "Using abilities adds +1.5% CD Reduction. Resets each wave.", "Using abilities adds +2% CD Reduction. Resets each wave.", "Using abilities adds +3% CD Reduction. Resets each wave."], ["+25% ability damage / healing", "+50% ability damage / healing", "+75% ability damage / healing", "+100% ability damage / healing"], ["0.1% of damage dealt granted as Ultimate Charge", "0.2% of damage dealt granted as Ultimate Charge", "0.3% of damage dealt granted as Ultimate Charge", "0.5% of damage dealt granted as Ultimate Charge", "Gain bonus stats as long as a certain teammate is alive."]])
+    PerkColors.append([Color.RED, Color.PURPLE, Color.BLUE, Color.RED, Color.GREEN, Color.GREEN, Color.PURPLE, Color.RED, Color.RED, Color.BLUE])
 
 
 rule "Flavour text":
@@ -5842,35 +5682,15 @@ rule "anti crash":
     waitUntil(getServerLoad() < 250, 99999)
     setSlowMotion(100)
 
-rule "VI The Lovers":
+
+rule "the lovers: ally survival bonus":
     @Event eachPlayer
     @Team 1
     @Condition 39 in eventPlayer.PerksActive == true
     
+    eventPlayer.AllStats = [eventPlayer.StatHealth, eventPlayer.StatHealing, eventPlayer.StatDamage, eventPlayer.StatCooldown, eventPlayer.StatDefense, eventPlayer.StatDodge, eventPlayer.StatCritChance, eventPlayer.StatCritPower]
+    eventPlayer.PerkChosen = eventPlayer.PerksLevel[eventPlayer.PerksActive.index(39)]
+    eventPlayer.Lover = random.choice(getPlayers(Team.1))
+    if eventPlayer.AllStats * ([2, 3, 4, 5][eventPlayer.PerkChosen - 1]) if eventPlayer.Lover in getLivingPlayers(Team.1) else eventPlayer.AllStats * ([0.7, 0.5, 0.3, 0.1][eventPlayer.PerkChosen - 1]):
+    RecalculateStats()
 
-    #pick random friendly player, display their name somewhere. they are your bonded pair
-    eventPlayer.Lover = random.choice([player for player in getAllPlayers() if eventPlayer != player])
-    eventPlayer.AllStats = eventPlayer.StatHealth and eventPlayer.StatHealing and eventPlayer.StatDamage and eventPlayer.StatCooldown and eventPlayer.StatDefense and eventPlayer.StatDodge and eventPlayer.StatCritChance and eventPlayer.StatCritPower
-
-    if eventPlayer.PerkChosen == 1:
-    if eventPlayer.Lover in getLivingPlayers(Team.1):
-        (eventPlayer.AllStats * 1.05)
-    else:
-        (eventPlayer.AllStats * 0.95)
-    elif eventPlayer.PerkChosen == 2:
-    if eventPlayer.Lover in getLivingPlayers(Team.1):
-         (eventPlayer.AllStats * 1.1)
-    else:
-        (eventPlayer.AllStats * 0.9)
-    elif eventPlayer.PerkChosen == 3:
-    if eventPlayer.Lover in getLivingPlayers(Team.1):
-        (eventPlayer.AllStats * 1.2)
-    else:
-         ( eventPlayer.AllStats * 0.85)
-    elif eventPlayer.PerkChosen == 4:
-        if eventPlayer.Lover in getLivingPlayers(Team.1):
-            (eventPlayer.AllStats * 1.33)
-        else:
-            (eventPlayer.AllStats * 0.80)
-        RecalculateStats()
-    #IF bonded pair is alive, +5%/10%/20%/33% stats, IF they are dead, -5%/-10%/-15%/-20% stats (can probably make this an else)
