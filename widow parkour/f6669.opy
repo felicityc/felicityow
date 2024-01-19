@@ -56,6 +56,7 @@ globalvar TempVar 50
 globalvar nullTimeArray 52
 globalvar FirstPlaceTimeString 53
 globalvar FirstPlaceTime 54
+globalvar Hardcore 55
 
 
 #Player variables
@@ -1082,6 +1083,23 @@ rule "Resurrection after death (Originally from peace's mercy parkour editor: T6
     
     #@Condition eventPlayer.isDummy() == false
     if not eventPlayer.finished and not eventPlayer.freeMode:
+        if Hardcore == true:
+            eventPlayer.teleport(Checkpoint[0][0])
+            eventPlayer.startForcingHero(Hero.WIDOWMAKER)
+            InitializePlayerVariables()
+            EditPlayerData()
+            CreatePlayerTargetBot()
+            GetCurrentCheckpoint()
+            SetCurrentAbilities()
+            TeleportCurrentBot()
+            DisplayCurrentAbilityMsgs()
+            async(CreateCurrentEffects, AsyncBehavior.RESTART)
+            CreateCurrentWorldText()
+            async(DisplayCurrentCustomBigMsgs, AsyncBehavior.NOOP)
+            async(DisplayCurrentCustomSmallMsgs, AsyncBehavior.NOOP)
+            playEffect(eventPlayer, DynamicEffect.TRACER_RECALL_REAPPEAR_SOUND, null, eventPlayer, 200)
+            eventPlayer.segmentStart = 0
+        else:
         eventPlayer.teleport(eventPlayer.checkpointA[0])
         eventPlayer.mistake += 1
         SetCurrentAbilities()
@@ -1160,22 +1178,21 @@ rule "Get orb (Originally from peace's mercy parkour editor: T6QQT)":
     eventPlayer.setAbility1Enabled(true)
 
 
-rule "Back to point refresh ablities (Originally from peace's mercy parkour editor: T6QQT)":
-    @Event eachPlayer
-    @Team 1
-    @Condition eventPlayer.finished == false
-    @Condition eventPlayer.freeMode == false
-    @Condition eventPlayer.checkpointA == true
-    @Condition eventPlayer.isOnGround() == true
-    @Condition distance(eventPlayer, eventPlayer.checkpointA[0]) <= eventPlayer.checkpointA[1]
+rule "Back to point (Originally from peace's mercy parkour editor: T6QQT)":
+        @Event eachPlayer
+        @Team 1
+        @Condition eventPlayer.checkpointA == true
+        @Condition (eventPlayer.isHoldingButton(Button.ULTIMATE) or eventPlayer.isCommunicating(Comms.SPRAY_UP)) == true
+        
+        if not Hardcore and not eventPlayer.finished and not eventPlayer.freeMode and eventPlayer.isHoldingButton(Button.ULTIMATE):
+            TeleportToCurrentCheckoint()
+        elif EditMode and eventPlayer.isCommunicating(Comms.SPRAY_UP):
+            CancelAbilityAndMomentum()
+            eventPlayer.teleport(eventPlayer.checkpointA[0])
+            if eventPlayer.currentOrb:
+                TeleportCurrentBot()
     
-    if not eventPlayer.isSetAbilities:
-        SetCurrentAbilities()
-        if eventPlayer.currentOrb:
-            TeleportCurrentBot()
-    eventPlayer.isSetAbilities = false
-
-
+    
 rule "Crouch disabled tips (Originally from peace's mercy parkour editor: T6QQT)":
     @Event eachPlayer
     @Team 1
@@ -2006,6 +2023,7 @@ def InitializeGlobalVariables():
     @Name "Subroutine  InitializeGlobalVariables (Originally from peace's mercy parkour editor: T6QQT)"
     
     EditMode = createWorkshopSetting(bool, "Edit Mode(편집 모드)", "Edit Mode(편집 모드)", true, 0)
+    Hardcore = createWorkshopSetting(bool, "Difficulty", "Hardcore Mode", false, 0)
     NewCheckpointDefaultRadius = createWorkshopSetting(float[1:5], "Edit Mode(편집 모드)", "New level radius(새 관문 반경)", 1.6, 1)
     NewCheckpointDefaultCtrl = createWorkshopSetting(bool, "Edit Mode(편집 모드)", "New level crouch(새 관문 앉기)", false, 2)
     NewCheckpointDefaultMaxRefresh = createWorkshopSetting(bool, "Edit Mode(편집 모드)", "New level Ga infinite times(새 관문 수호천사를 무제한)", false, 3)
@@ -2162,6 +2180,9 @@ def CreatePlayerHUDAndEffects():
     else:
         createEffect(eventPlayer if eventPlayer.checkpointB[0] else null, Effect.BAD_AURA, Config[9] if eventPlayer.checkpointB[5] else Config[6], eventPlayer.checkpointB[0], eventPlayer.checkpointB[1], EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
     if not EditMode:
+        if Hardcore:
+            hudSubheader(eventPlayer, "Hardcore Mode is enabled,\nmistakes will restart the run.", HudPosition.RIGHT, -10, rgb(248, 0, 0), HudReeval.NONE, SpecVisibility.ALWAYS)
+        else:
         hudText(getAllPlayers() if eventPlayer.bestRecord and Top5.index(eventPlayer.playerNickname) < 0 else null, heroIcon(Hero.WIDOWMAKER), eventPlayer.playerNickname, "{0}s".format(eventPlayer.bestRecord), HudPosition.LEFT, eventPlayer.bestRecord / 100, Config[28], Config[28], Config[28], HudReeval.VISIBILITY_SORT_ORDER_AND_STRING, SpecVisibility.DEFAULT)
         hudSubheader(eventPlayer, "Previous Segment: {0} {1}".format(eventPlayer.segmentTimeArray[eventPlayer.checkpoint - 1] if eventPlayer.checkpoint else "N/A", "({0})".format(eventPlayer.segmentVsPersonalBestArray[eventPlayer.checkpoint - 1]) if eventPlayer.checkpoint and eventPlayer.personalBestArray else ""), HudPosition.RIGHT, 1, (rgb(255, 215, 0) if eventPlayer.segmentTimeArray[eventPlayer.checkpoint - 1] <= eventPlayer.bestSegmentsArray[eventPlayer.checkpoint - 1] else Color.GREEN if eventPlayer.segmentTimeArray[eventPlayer.checkpoint - 1] <= eventPlayer.personalBestArray[eventPlayer.checkpoint - 1] else Color.RED) if eventPlayer.checkpoint and eventPlayer.personalBestArray else Color.GREEN, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
         hudSubheader(eventPlayer, "Running Total vs PB: {0}s".format(eventPlayer.vsPersonalBestRunningTally) if eventPlayer.checkpoint and eventPlayer.personalBestArray else "", HudPosition.RIGHT, 1, Color.GREEN if eventPlayer.vsPersonalBestRunningTally <= 0 else Color.RED, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
@@ -2175,11 +2196,29 @@ def TeleportToCurrentCheckoint():
     
     CancelAbilityAndMomentum()
     eventPlayer.mistake += 1 if eventPlayer.checkpoint != 0 and not eventPlayer.freeMode and distance(eventPlayer, eventPlayer.checkpointA[0]) > eventPlayer.checkpointA[1] else 0
+    if Hardcore == true:
+        eventPlayer.teleport(Checkpoint[0][0])
+        eventPlayer.startForcingHero(Hero.WIDOWMAKER)
+        InitializePlayerVariables()
+        EditPlayerData()
+        CreatePlayerTargetBot()
+        GetCurrentCheckpoint()
+        SetCurrentAbilities()
+        TeleportCurrentBot()
+        DisplayCurrentAbilityMsgs()
+        async(CreateCurrentEffects, AsyncBehavior.RESTART)
+        CreateCurrentWorldText()
+        async(DisplayCurrentCustomBigMsgs, AsyncBehavior.NOOP)
+        async(DisplayCurrentCustomSmallMsgs, AsyncBehavior.NOOP)
+        playEffect(eventPlayer, DynamicEffect.TRACER_RECALL_REAPPEAR_SOUND, null, eventPlayer, 200)
+        eventPlayer.segmentStart = 0
+    else:
     eventPlayer.teleport(eventPlayer.checkpointA[0])
     eventPlayer.setStatusEffect(null, Status.ROOTED, 0.25)
     SetCurrentAbilities()
     if eventPlayer.currentOrb:
         TeleportCurrentBot()
+
 
 
 def ContinueTiming():
