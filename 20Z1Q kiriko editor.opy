@@ -247,26 +247,26 @@ subroutine KillOrResurrectBot 28
 #!extension explosionSounds
 
 
-rule "Creator and code (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Creator and code (source: T6QQT)":
     #String, Fill in the creator
     CreatorAndCode[0] = "Your name here :3"
     #String, Fill in the code
     CreatorAndCode[1] = "Code here :3"
 
 
-rule "Big message text (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Big message text (source: T6QQT)":
     #index, Fill in the level;    
     # string, Fill in the text (Multiple texts in one level)
     BigMessages[0] = ["", ""]
 
 
-rule "Small message text (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Small message text (source: T6QQT)":
     #index, Fill in the level;    
     #String, Fill in the text (Multiple texts in one level)
     SmallMessages[0] = ["", ""]
 
 
-rule "Player title (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Player title (source: T6QQT)":
     #[1] Fill in the display text, If not fill in, The default is the player's nickname; 
     #[2] Fill in the text color, White is a random color. By using 'custom color', you can input an RGBA value instead of the stock colors.'
     Vips = [["Peace", "{0} Peace".format(abilityIconString(Hero.MERCY, Button.ABILITY_1)), Color.WHITE]]
@@ -276,7 +276,7 @@ rule "Player title (Originally from peace's mercy parkour editor: T6QQT)":
     Vips[len(Vips)] = ["", "", Color.WHITE]
 
 
-rule "Personalized Configuration (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Personalized Configuration (source: T6QQT)":
     #Ring color of this level
     Config[0] = rgb(34, 162, 192)
     #Bot icon color (Crouch Enabled)
@@ -379,7 +379,7 @@ rule "Personalized Configuration (Originally from peace's mercy parkour editor: 
     Config[62] = [Color.VIOLET, (nearestWalkablePosition(vect(500, -500, 500)) + nearestWalkablePosition(vect(-500, -500, -500))) / 2 + vect(0, 100, 0), 45]
 
 
-rule "Global initialization (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Global initialization (source: T6QQT)":
     InitializeGlobalVariables()
     disableAnnouncer()
     disableScoring()
@@ -393,7 +393,7 @@ rule "Global initialization (Originally from peace's mercy parkour editor: T6QQT
     pauseMatchTime()
 
 
-rule "Player initialization (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Player initialization (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.hasSpawned() == true
@@ -420,7 +420,7 @@ rule "Player initialization (Originally from peace's mercy parkour editor: T6QQT
     async(DisplayCurrentCustomSmallMsgs, AsyncBehavior.NOOP)
 
 
-rule "Switch edit mode (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Switch edit mode (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition EditMode == true
@@ -446,7 +446,7 @@ rule "Switch edit mode (Originally from peace's mercy parkour editor: T6QQT)":
         playEffect(eventPlayer, DynamicEffect.RING_EXPLOSION_SOUND, null, eventPlayer, 100)
 
 
-rule "create / delete checkpoint, orb, sphere, cloud (Originally from peace's mercy parkour editor: T6QQT)":
+rule "create / delete checkpoint, orb, sphere, cloud (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition EditMode == true
@@ -587,7 +587,7 @@ rule "create / delete checkpoint, orb, sphere, cloud (Originally from peace's me
         playEffect(eventPlayer, DynamicEffect.DEBUFF_IMPACT_SOUND, null, eventPlayer, 100)
 
 
-rule "Move checkpoint (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Move checkpoint (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition EditMode == true
@@ -611,7 +611,7 @@ rule "Move checkpoint (Originally from peace's mercy parkour editor: T6QQT)":
     playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, null, eventPlayer, 100)
 
 
-rule "Insert point (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Insert point (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition EditMode == true
@@ -642,7 +642,7 @@ rule "Insert point (Originally from peace's mercy parkour editor: T6QQT)":
     playEffect(eventPlayer, DynamicEffect.BUFF_IMPACT_SOUND, null, eventPlayer, 100)
 
 
-rule "Create / Delete bot (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Create / Delete bot (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition EditMode == true
@@ -692,7 +692,7 @@ rule "Create / Delete bot (Originally from peace's mercy parkour editor: T6QQT)"
             playEffect(eventPlayer, DynamicEffect.DEBUFF_IMPACT_SOUND, null, eventPlayer, 100)
 
 
-rule "Choose checkpoint, orb, sphere, cloud (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Choose checkpoint, orb, sphere, cloud (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition EditMode == true
@@ -742,7 +742,7 @@ rule "Choose checkpoint, orb, sphere, cloud (Originally from peace's mercy parko
             ChooseCloudPosition = eventPlayer.currentCloud[CurrentChooseCloud][0]
 
 
-rule "Switch crouch,teleport, unlimited ga, need resurrect (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Switch crouch,teleport, unlimited ga, need resurrect (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition EditMode == true
@@ -810,7 +810,7 @@ rule "Switch crouch,teleport, unlimited ga, need resurrect (Originally from peac
         playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, null, eventPlayer, 100)
 
 
-rule "Modify the size of the checkpoint / sphere / cloud (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Modify the size of the checkpoint / sphere / cloud (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition EditMode == true
@@ -888,7 +888,7 @@ rule "Modify the size of the checkpoint / sphere / cloud (Originally from peace'
             playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, null, eventPlayer, 100)
 
 
-rule "Move Sphere / Cloud (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Move Sphere / Cloud (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition EditMode == true
@@ -997,7 +997,7 @@ rule "Move Sphere / Cloud (Originally from peace's mercy parkour editor: T6QQT)"
             playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, null, eventPlayer, 100)
 
 
-rule "If the map is a 3CP map, group up can transfer to other map (Originally from peace's mercy parkour editor: T6QQT)":
+rule "If the map is a 3CP map, group up can transfer to other map (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition EditMode == true
@@ -1008,7 +1008,7 @@ rule "If the map is a 3CP map, group up can transfer to other map (Originally fr
     eventPlayer.teleport(nearestWalkablePosition(getObjectivePosition(eventPlayer.objectivePosition)))
 
 
-rule "Export data (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Export data (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition EditMode == true
@@ -1041,7 +1041,7 @@ rule "Export data (Originally from peace's mercy parkour editor: T6QQT)":
     bigMessage(getAllPlayers(), "Data exported")
 
 
-rule "Arrival checkpoint (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Arrival checkpoint (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.finished == false
@@ -1092,7 +1092,6 @@ rule "Arrival checkpoint (Originally from peace's mercy parkour editor: T6QQT)":
     if eventPlayer.checkpoint < len(Checkpoint) - 1:
         if not EditMode and eventPlayer.checkpointA[5]:
             return
-        playEffect(eventPlayer, DynamicEffect.BUFF_EXPLOSION_SOUND, null, eventPlayer, 100)
     else:
         stopChasingVariable(eventPlayer.time)
         if not EditMode and not eventPlayer.cheat:
@@ -1109,7 +1108,7 @@ rule "Arrival checkpoint (Originally from peace's mercy parkour editor: T6QQT)":
         destroyDummy(eventPlayer.getTeam(), eventPlayer.getSlot() + getNumberOfSlots(Team.ALL))
 
 
-rule "Set status for players (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Set status for players (source: T6QQT)":
     @Event eachPlayer
     @Condition eventPlayer.hasStatusEffect(Status.PHASED_OUT) == false
     
@@ -1133,7 +1132,7 @@ rule "Set status for players (Originally from peace's mercy parkour editor: T6QQ
                 wait(1)
 
 
-rule "Resurrection after death (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Resurrection after death (source: T6QQT)":
     @Event playerDied
     @Team 1
     @Condition eventPlayer.spectatorMode == false
@@ -1167,7 +1166,7 @@ rule "Resurrection after death (Originally from peace's mercy parkour editor: T6
     eventPlayer.resurrect()
 
 
-rule "Kill bot (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Kill bot (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.numberOfNeedResurrect != 0
@@ -1177,7 +1176,7 @@ rule "Kill bot (Originally from peace's mercy parkour editor: T6QQT)":
     kill(eventPlayer.targetBot, null)
 
 
-rule "back point after landing (Originally from peace's mercy parkour editor: T6QQT)":
+rule "back point after landing (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.finished == false
@@ -1191,7 +1190,7 @@ rule "back point after landing (Originally from peace's mercy parkour editor: T6
     TeleportToCurrentCheckoint()
 
 
-rule "Ga usage restrictions (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Ga usage restrictions (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.finished == false
@@ -1205,7 +1204,7 @@ rule "Ga usage restrictions (Originally from peace's mercy parkour editor: T6QQT
         eventPlayer.setAbility1Enabled(false)
 
 
-rule "Get orb (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Get orb (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.tempCurrentOrb != []
@@ -1235,7 +1234,7 @@ rule "Get orb (Originally from peace's mercy parkour editor: T6QQT)":
     eventPlayer.setAbility1Enabled(true)
 
 
-rule "Back to point refresh ablities (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Back to point refresh ablities (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.finished == false
@@ -1251,7 +1250,7 @@ rule "Back to point refresh ablities (Originally from peace's mercy parkour edit
     eventPlayer.isSetAbilities = false
 
 
-rule "Crouch disabled tips (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Crouch disabled tips (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
@@ -1279,7 +1278,7 @@ rule "3rd person (Originally from T6QQT)":
         eventPlayer.stopCamera()
 
 
-rule "Back to point (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Back to point (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.checkpointA == true
@@ -1294,7 +1293,7 @@ rule "Back to point (Originally from peace's mercy parkour editor: T6QQT)":
             TeleportCurrentBot()
 
 
-rule "Free mode (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Free mode (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.finished == false
@@ -1326,7 +1325,7 @@ rule "Free mode (Originally from peace's mercy parkour editor: T6QQT)":
         eventPlayer.allowButton(Button.SECONDARY_FIRE)
 
 
-rule "Spectator mode (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Spectator mode (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.isHoldingButton(Button.ULTIMATE) == true
@@ -1356,7 +1355,7 @@ rule "Spectator mode (Originally from peace's mercy parkour editor: T6QQT)":
         ContinueTiming()
 
 
-rule "voice (Originally from peace's mercy parkour editor: T6QQT)":
+rule "voice (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition (eventPlayer.isCommunicating(Comms.NEED_HELP) or eventPlayer.isCommunicating(Comms.SORRY) or eventPlayer.isCommunicating(Comms.THANKS)) == true
@@ -1378,7 +1377,7 @@ rule "voice (Originally from peace's mercy parkour editor: T6QQT)":
     wait(2)
 
 
-rule "set temporary checkpoint (Originally from peace's mercy parkour editor: T6QQT)":
+rule "set temporary checkpoint (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition (eventPlayer.freeMode or eventPlayer.finished) == true
@@ -1404,7 +1403,7 @@ rule "set temporary checkpoint (Originally from peace's mercy parkour editor: T6
         eventPlayer.teleport(eventPlayer.tp[1])
 
 
-rule "Obstacle Sphere effect (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Obstacle Sphere effect (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.currentSphere != []
@@ -1420,7 +1419,7 @@ rule "Obstacle Sphere effect (Originally from peace's mercy parkour editor: T6QQ
         eventPlayer.clearStatusEffect(Status.BURNING)
 
 
-rule "Elastic cloud effect (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Elastic cloud effect (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.currentCloud != []
@@ -1432,7 +1431,7 @@ rule "Elastic cloud effect (Originally from peace's mercy parkour editor: T6QQT)
     playEffect(eventPlayer, DynamicEffect.EXPLOSION_SOUND, null, eventPlayer, 80)
 
 
-rule "Player left match, destroy the player`s mercy (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Player left match, destroy the player`s mercy (source: T6QQT)":
     @Event playerLeft
     @Team 1
     
@@ -1443,7 +1442,7 @@ rule "Player left match, destroy the player`s mercy (Originally from peace's mer
             destroyDummy(Team.1 if getNumberOfSlots(Team.1) > getNumberOfSlots(Team.2) else Team.2, I + getNumberOfSlots(Team.ALL))
 
 
-rule "Start timing after leaving the initial point (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Start timing after leaving the initial point (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition EditMode == false
@@ -1459,7 +1458,7 @@ rule "Start timing after leaving the initial point (Originally from peace's merc
         eventPlayer.segmentStart = 0
 
 
-rule "Return to the initial point to reset the timing (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Return to the initial point to reset the timing (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition EditMode == false
@@ -1473,7 +1472,7 @@ rule "Return to the initial point to reset the timing (Originally from peace's m
     eventPlayer.leaveOriginalCheckpoint = false
 
 
-rule "Restart (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Restart (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
@@ -1512,7 +1511,7 @@ rule "Restart (Originally from peace's mercy parkour editor: T6QQT)":
     eventPlayer.segmentStart = 0
 
 
-rule "Skip / Back (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Skip / Back (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.isHoldingButton(Button.ABILITY_2) == true
@@ -1536,7 +1535,7 @@ rule "Skip / Back (Originally from peace's mercy parkour editor: T6QQT)":
     SkipOrBackCheckpoint()
 
 
-rule "Show or hide shortcuts (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Show or hide shortcuts (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
@@ -1560,7 +1559,7 @@ rule "Show or hide shortcuts (Originally from peace's mercy parkour editor: T6QQ
             ShowHotKeyPlayers.remove(eventPlayer)
 
 
-rule "Teleport animation (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Teleport animation (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition EditMode == false
@@ -1589,7 +1588,7 @@ rule "Teleport animation (Originally from peace's mercy parkour editor: T6QQT)":
         eventPlayer.teleport(eventPlayer.checkpointB[0])
 
 
-rule "Sparks, dome, aura, hexagram effect (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Sparks, dome, aura, hexagram effect (source: T6QQT)":
     @Condition EditMode == false
     @Condition (Dome or Aura or Sparkle or Hexagram) == true
     
@@ -1615,7 +1614,7 @@ rule "Sparks, dome, aura, hexagram effect (Originally from peace's mercy parkour
             CircleLoop = 0
 
 
-rule "Bombing effect (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Bombing effect (source: T6QQT)":
     @Condition getTotalTimeElapsed() > 16140
     
     smallMessage(getAllPlayers(), "Countdown: 60 seconds")
@@ -1665,7 +1664,7 @@ rule "Bombing effect (Originally from peace's mercy parkour editor: T6QQT)":
     restartMatch()
 
 
-rule "Finished setting (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Finished setting (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.checkpoint >= len(Checkpoint) - 1
@@ -1674,7 +1673,7 @@ rule "Finished setting (Originally from peace's mercy parkour editor: T6QQT)":
     EnableAllAbilities()
 
 
-rule "Not finished setting (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Not finished setting (source: T6QQT)":
     @Event eachPlayer
     @Condition eventPlayer.checkpoint < len(Checkpoint) - 1
     
@@ -1686,7 +1685,7 @@ rule "Not finished setting (Originally from peace's mercy parkour editor: T6QQT)
             eventPlayer.movementCollision = true
 
 
-rule "Set Ultimate Charge 100% (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Set Ultimate Charge 100% (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition (eventPlayer.finished or eventPlayer.freeMode) == true
@@ -1695,7 +1694,7 @@ rule "Set Ultimate Charge 100% (Originally from peace's mercy parkour editor: T6
     eventPlayer.setUltCharge(100)
 
 
-rule "Hold R, go through the wall (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Hold R, go through the wall (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition (eventPlayer.finished or eventPlayer.freeMode) == true
@@ -1720,7 +1719,7 @@ rule "Hold R, go through the wall (Originally from peace's mercy parkour editor:
         smallMessage(eventPlayer, "Disable Movement Collision With Environment")
 
 
-rule "Interact, teleporting players (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Interact, teleporting players (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
@@ -1748,7 +1747,7 @@ rule "Interact, teleporting players (Originally from peace's mercy parkour edito
         eventPlayer.teleport(eventPlayer.getPlayerClosestToReticle(Team.ALL))
 
 
-rule "Voice Line Up,  Swap effect (Originally from peace's mercy parkour editor: T6QQT)":
+rule "Voice Line Up,  Swap effect (source: T6QQT)":
     @Event eachPlayer
     @Team 1
     @Condition EditMode == false
@@ -1806,7 +1805,7 @@ rule "Voice Line Up,  Swap effect (Originally from peace's mercy parkour editor:
 
 
 def ErrorWarningMessage():
-    @Name "Subroutine ErrorWarningMessage (Originally from peace's mercy parkour editor: T6QQT)"
+    @Name "Subroutine ErrorWarningMessage (source: T6QQT)"
     
     if len(Checkpoint) == 0:
         smallMessage(eventPlayer, "There are no checkpoints yet")
@@ -1855,7 +1854,7 @@ def ErrorWarningMessage():
 
 
 def CreateNewEffect():
-    @Name "Subroutine  CreateNewEffect (Originally from peace's mercy parkour editor: T6QQT)"
+    @Name "Subroutine  CreateNewEffect (source: T6QQT)"
     
     if eventPlayer.editMode == 2:
         destroyIcon(eventPlayer.botIcons[CurrentChooseOrb])
@@ -1886,7 +1885,7 @@ def CreateNewEffect():
 
 
 def EditChoosedEffect():
-    @Name "Subroutine  EditChoosedEffect (Originally from peace's mercy parkour editor: T6QQT)"
+    @Name "Subroutine  EditChoosedEffect (source: T6QQT)"
     
     if eventPlayer.editMode == 2:
         destroyIcon(eventPlayer.orbIcons[CurrentChooseOrb])
@@ -1909,7 +1908,7 @@ def EditChoosedEffect():
 
 
 def KillOrResurrectBot():
-    @Name "Subroutine  KillOrResurrectBot (Originally from peace's mercy parkour editor: T6QQT)"
+    @Name "Subroutine  KillOrResurrectBot (source: T6QQT)"
     
     if eventPlayer.editMode == 2:
         eventPlayer.nearestOrb = eventPlayer.currentOrb[CurrentChooseOrb]
@@ -1929,7 +1928,7 @@ def KillOrResurrectBot():
 
 
 def TeleportBotToRefreshPosition():
-    @Name "Subroutine  TeleportBotToRefreshPosition (Originally from peace's mercy parkour editor: T6QQT)"
+    @Name "Subroutine  TeleportBotToRefreshPosition (source: T6QQT)"
     
     eventPlayer.targetBot.teleport(eventPlayer.nearestOrb[1] if eventPlayer.nearestOrb[1] else Config[60])
     eventPlayer.targetBot.startForcingOutlineFor(eventPlayer, true, Color.RED if eventPlayer.nearestOrb[1] else null, OutlineVisibility.ALWAYS)
@@ -1938,7 +1937,7 @@ def TeleportBotToRefreshPosition():
 
 
 def ClearRedundantData():
-    @Name "Subroutine ClearRedundantData (Originally from peace's mercy parkour editor: T6QQT)"
+    @Name "Subroutine ClearRedundantData (source: T6QQT)"
     
     EditMode = null
     Debug = null
@@ -1993,7 +1992,7 @@ def ClearRedundantData():
 
 
 def InitializeGlobalVariables():
-    @Name "Subroutine  InitializeGlobalVariables (Originally from peace's mercy parkour editor: T6QQT)"
+    @Name "Subroutine  InitializeGlobalVariables (source: T6QQT)"
     
     Hardcore = createWorkshopSetting(bool, "Difficulty", "Hardcore Mode", false, 0)
     EditMode = createWorkshopSetting(bool, "Edit Mode", "Edit Mode", true, 0)
@@ -2031,7 +2030,7 @@ def InitializeGlobalVariables():
 
 
 def InitializePlayerVariables():
-    @Name "Subroutine InitializePlayerVariables (Originally from peace's mercy parkour editor: T6QQT)"
+    @Name "Subroutine InitializePlayerVariables (source: T6QQT)"
     
     eventPlayer.checkpoint = 0
     eventPlayer.freeMode = false
@@ -2067,7 +2066,7 @@ def InitializePlayerVariables():
 
 
 def CreatePlayerTargetBot():
-    @Name "Subroutine  CreatePlayerTargetBot (Originally from peace's mercy parkour editor: T6QQT)"
+    @Name "Subroutine  CreatePlayerTargetBot (source: T6QQT)"
     
     if not entityExists(eventPlayer.targetBot):
         createDummy(Hero.ZENYATTA, getOppositeTeam(eventPlayer.getTeam()), eventPlayer.getSlot() + getNumberOfSlots(Team.ALL), Checkpoint[eventPlayer.checkpoint][3][0] if Checkpoint[eventPlayer.checkpoint][3][0] else Config[60], null)
@@ -2087,7 +2086,7 @@ def CreatePlayerTargetBot():
 
 
 def CreateGlobalHUD():
-    @Name "Subroutine CreateGlobalHUD (Originally from peace's mercy parkour editor: T6QQT)"
+    @Name "Subroutine CreateGlobalHUD (source: T6QQT)"
     
     if getCurrentGamemode() == Gamemode.SKIRMISH:
         setObjectiveDescription(getAllPlayers(), "Elapsed time {0} minutes {1} seconds".format(floor(getTotalTimeElapsed() / 60), floor(getTotalTimeElapsed() % 60)), HudReeval.VISIBILITY_AND_STRING)
@@ -2125,7 +2124,7 @@ def CreateGlobalHUD():
 
 
 def CreatePlayerHUDAndEffects():
-    @Name "Subroutine CreatePlayerHUDAndEffects (Originally from peace's mercy parkour editor: T6QQT)"
+    @Name "Subroutine CreatePlayerHUDAndEffects (source: T6QQT)"
     
     #this is where you set the vector locations for the scoreboard charts at the end of a run. go ingame and use the camera button to more easily find a spot, then adjust
     if not EditMode:
@@ -2166,7 +2165,7 @@ def CreatePlayerHUDAndEffects():
 
 
 def TeleportToCurrentCheckoint():
-    @Name "Subroutine TeleportToCurrentCheckoint (Originally from peace's mercy parkour editor: T6QQT)"
+    @Name "Subroutine TeleportToCurrentCheckoint (source: T6QQT)"
     
     CancelAbilityAndMomentum()
     eventPlayer.mistake += 1 if eventPlayer.checkpoint != 0 and not eventPlayer.freeMode and distance(eventPlayer, eventPlayer.checkpointA[0]) > eventPlayer.checkpointA[1] else 0
@@ -2195,14 +2194,14 @@ def TeleportToCurrentCheckoint():
 
 
 def ContinueTiming():
-    @Name "Subroutine ContinueTiming (Originally from peace's mercy parkour editor: T6QQT)"
+    @Name "Subroutine ContinueTiming (source: T6QQT)"
     
     if not EditMode and not eventPlayer.finished and not eventPlayer.freeMode and not eventPlayer.cheat and eventPlayer.leaveOriginalCheckpoint:
         chase(eventPlayer.time, 16200, rate=1, ChaseReeval.NONE)
 
 
 def GetCurrentCheckpoint():
-    @Name "Subroutine GetCurrentCheckpoint (Originally from peace's mercy parkour editor: T6QQT)"
+    @Name "Subroutine GetCurrentCheckpoint (source: T6QQT)"
     
     eventPlayer.checkpointA = Checkpoint[eventPlayer.checkpoint] if Checkpoint[eventPlayer.checkpoint] else null
     eventPlayer.checkpointB = Checkpoint[eventPlayer.checkpoint + 1] if Checkpoint[eventPlayer.checkpoint + 1] else null
@@ -2215,7 +2214,7 @@ def GetCurrentCheckpoint():
 
 
 def SetCurrentAbilities():
-    @Name "Subroutine  SetCurrentAbilities (Originally from peace's mercy parkour editor: T6QQT)"
+    @Name "Subroutine  SetCurrentAbilities (source: T6QQT)"
     
     eventPlayer.setCrouchEnabled(eventPlayer.checkpointA[2])
     #eventPlayer.setAbility1Enabled(true if eventPlayer.checkpointA[3][0] else false)
@@ -2234,14 +2233,14 @@ def SetCurrentAbilities():
 
 
 def TeleportCurrentBot():
-    @Name "Subroutine TeleportCurrentBot (Originally from peace's mercy parkour editor: T6QQT)"
+    @Name "Subroutine TeleportCurrentBot (source: T6QQT)"
     
     eventPlayer.targetBot.teleport(eventPlayer.checkpointA[3][0] if eventPlayer.checkpointA[3][0] else Config[60])
     eventPlayer.targetBot.startForcingOutlineFor(eventPlayer, true, (Config[1] if eventPlayer.checkpointA[2] else Color.RED) if eventPlayer.checkpointA[3][0] else null, OutlineVisibility.ALWAYS)
 
 
 def DisplayCurrentAbilityMsgs():
-    @Name "Subroutine  DisplayCurrentAbilityMsgs (Originally from peace's mercy parkour editor: T6QQT)"
+    @Name "Subroutine  DisplayCurrentAbilityMsgs (source: T6QQT)"
     
     if eventPlayer.checkpointA[5] or not eventPlayer.checkpointB:
         return
@@ -2261,7 +2260,7 @@ def DisplayCurrentAbilityMsgs():
 
 
 def CreateCurrentEffects():
-    @Name "Subroutine  CreateCurrentEffects (Originally from peace's mercy parkour editor: T6QQT)"
+    @Name "Subroutine  CreateCurrentEffects (source: T6QQT)"
     
     destroyEffect(eventPlayer.orbEffects)
     destroyEffect(eventPlayer.botEffects)
@@ -2304,7 +2303,7 @@ def CreateCurrentEffects():
 
 
 def CreateCurrentWorldText():
-    @Name "Subroutine CreateCurrentWorldText (Originally from peace's mercy parkour editor: T6QQT)"
+    @Name "Subroutine CreateCurrentWorldText (source: T6QQT)"
     
     destroyInWorldText(eventPlayer.currentWorldText)
     if WorldTexts[eventPlayer.displayedCheckpoint] and not eventPlayer.checkpointA[5]:
@@ -2313,7 +2312,7 @@ def CreateCurrentWorldText():
 
 
 def DisplayCurrentCustomBigMsgs():
-    @Name "Subroutine DisplayCurrentCustomBigMsgs (Originally from peace's mercy parkour editor: T6QQT)"
+    @Name "Subroutine DisplayCurrentCustomBigMsgs (source: T6QQT)"
     
     if BigMessages[eventPlayer.displayedCheckpoint] and not eventPlayer.checkpointA[5]:
         eventPlayer.currentBigMessage = [i for i in BigMessages[eventPlayer.displayedCheckpoint] if i]
@@ -2325,7 +2324,7 @@ def DisplayCurrentCustomBigMsgs():
 
 
 def DisplayCurrentCustomSmallMsgs():
-    @Name "Subroutine DisplayCurrentCustomSmallMsgs (Originally from peace's mercy parkour editor: T6QQT)"
+    @Name "Subroutine DisplayCurrentCustomSmallMsgs (source: T6QQT)"
     
     #you can adjust how long small messages take to show up here
     if SmallMessages[eventPlayer.displayedCheckpoint] and not eventPlayer.checkpointA[5]:
@@ -2338,7 +2337,7 @@ def DisplayCurrentCustomSmallMsgs():
 
 
 def EnableAllAbilities():
-    @Name "Subroutine EnableAllAbilities (Originally from peace's mercy parkour editor: T6QQT)"
+    @Name "Subroutine EnableAllAbilities (source: T6QQT)"
     
     eventPlayer.setCrouchEnabled(true)
     eventPlayer.setAbility1Enabled(true)
@@ -2348,7 +2347,7 @@ def EnableAllAbilities():
 
 
 def CancelAbilityAndMomentum():
-    @Name "Subroutine  CancelAbilityAndMomentum (Originally from peace's mercy parkour editor: T6QQT)"
+    @Name "Subroutine  CancelAbilityAndMomentum (source: T6QQT)"
     
     eventPlayer.cancelPrimaryAction()
     eventPlayer.applyImpulse(Vector.UP, 0, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
@@ -2357,7 +2356,7 @@ def CancelAbilityAndMomentum():
 
 
 def ValidationPlayerData():
-    @Name "Subroutine ValidationPlayerData (Originally from peace's mercy parkour editor: T6QQT)"
+    @Name "Subroutine ValidationPlayerData (source: T6QQT)"
     
     if PlayersData.index("{0}".format(eventPlayer)) > -1:
         eventPlayer.checkpoint = (([player for player in PlayersData if player[0] == "{0}".format(eventPlayer)])[0])[1]
@@ -2370,13 +2369,13 @@ def ValidationPlayerData():
 
 
 def EditPlayerData():
-    @Name "Subroutine EditPlayerData (Originally from peace's mercy parkour editor: T6QQT)"
+    @Name "Subroutine EditPlayerData (source: T6QQT)"
     
     PlayersData[eventPlayer.dataIndex] = ["{0}".format(eventPlayer), eventPlayer.checkpoint, eventPlayer.time, eventPlayer.mistake] if eventPlayer.checkpoint < len(Checkpoint) - 1 else ["{0}".format(eventPlayer), 0, 0, 0]
 
 
 def TempSavePlayerData():
-    @Name "Subroutine TempSavePlayerData (Originally from peace's mercy parkour editor: T6QQT)"
+    @Name "Subroutine TempSavePlayerData (source: T6QQT)"
     
     if not EditMode:
         if not eventPlayer.cheat:
@@ -2394,7 +2393,7 @@ def TempSavePlayerData():
 
 
 def ChooseCheckpoint():
-    @Name "Subroutine ChooseCheckpoint (Originally from peace's mercy parkour editor: T6QQT)"
+    @Name "Subroutine ChooseCheckpoint (source: T6QQT)"
     
     if eventPlayer.isHoldingButton(Button.PRIMARY_FIRE):
         eventPlayer.checkpoint += 1 - len(Checkpoint) if eventPlayer.checkpoint == len(Checkpoint) - 1 else 1
@@ -2403,7 +2402,7 @@ def ChooseCheckpoint():
 
 
 def SkipOrBackCheckpoint():
-    @Name "Subroutine SkipOrBackCheckpoint (Originally from peace's mercy parkour editor: T6QQT)"
+    @Name "Subroutine SkipOrBackCheckpoint (source: T6QQT)"
     
     if not EditMode:
         if eventPlayer.checkpoint == eventPlayer.playerData[0]:
