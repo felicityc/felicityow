@@ -112,6 +112,7 @@ globalvar EmoteSyncPlayers 47
 globalvar PreviewPosition 48
 globalvar CheckpointBPosition 49
 globalvar TempVar 50
+globalvar NewCheckpointDefaultMaxRefresh 51
 globalvar nullTimeArray 52
 globalvar FirstPlaceTimeString 53
 globalvar FirstPlaceTime 54
@@ -131,6 +132,7 @@ playervar sphereEffects 8
 playervar cloudEffects 9
 playervar objectivePosition 10
 playervar displayedCheckpoint 11
+playervar bhop 13
 playervar bestRecord 14
 playervar playerData 15
 playervar tempCurrentOrb 16
@@ -205,7 +207,7 @@ subroutine CreateCurrentWorldText 13
 subroutine DisplayCurrentCustomBigMsgs 14
 subroutine DisplayCurrentCustomSmallMsgs 15
 subroutine InitializeGlobalVariables 16
-subroutine TeleportToCurrentCheckoint 17
+subroutine TeleportToCurrentCheckpoint 17
 subroutine ValidationPlayerData 18
 subroutine ClearRedundantData 19
 subroutine PlayDestroyMapEffect 20
@@ -244,7 +246,9 @@ subroutine KillOrResurrectBot 28
 #!extension buffStatusEffects
 #!extension buffStatusEffects
 #!extension buffStatusEffects
+#!extension buffStatusEffects
 #!extension explosionSounds
+#!extension buffStatusEffects
 
 
 rule "Creator and code (Originally from peace's mercy parkour editor: T6QQT)":
@@ -398,6 +402,7 @@ rule "Player initialization (Originally from peace's mercy parkour editor: T6QQT
     @Team 1
     @Condition eventPlayer.hasSpawned() == true
     
+    #@Condition eventPlayer.isDummy() == false
     eventPlayer.disableGamemodeInWorldUi()
     getAllPlayers().disableNameplatesFor(getAllPlayers())
     eventPlayer.enableDeathSpectateAllPlayers()
@@ -471,7 +476,7 @@ rule "create / delete checkpoint, orb, sphere, cloud (Originally from peace's me
             #6, orb, default empty array
             #7, sphere, default empty array
             #8, cloud, default empty array
-            Checkpoint[len(Checkpoint)] = [eventPlayer.getPosition(), NewCheckpointDefaultRadius, NewCheckpointDefaultCtrl, [false, false, true]]
+            Checkpoint[len(Checkpoint)] = [eventPlayer.getPosition(), NewCheckpointDefaultRadius, NewCheckpointDefaultCtrl, [false, false, true], NewCheckpointDefaultMaxRefresh, false, [], [], []]
             eventPlayer.checkpoint = len(Checkpoint) - 1
             GetCurrentCheckpoint()
             TeleportCurrentBot()
@@ -631,7 +636,7 @@ rule "Insert point (Originally from peace's mercy parkour editor: T6QQT)":
     
     TempArray = Checkpoint.slice(eventPlayer.checkpoint + 1, len(Checkpoint))
     Checkpoint = Checkpoint.slice(0, eventPlayer.checkpoint + 1)
-    Checkpoint[len(Checkpoint)] = [eventPlayer.getPosition(), NewCheckpointDefaultRadius, NewCheckpointDefaultCtrl, [false, false, true]]
+    Checkpoint[len(Checkpoint)] = [eventPlayer.getPosition(), NewCheckpointDefaultRadius, NewCheckpointDefaultCtrl, [false, false, true], NewCheckpointDefaultMaxRefresh, false, [], [], []]
     Checkpoint.append(TempArray)
     eventPlayer.checkpoint += 1
     GetCurrentCheckpoint()
@@ -1052,12 +1057,12 @@ rule "Arrival checkpoint (Originally from peace's mercy parkour editor: T6QQT)":
     @Condition distance(eventPlayer, eventPlayer.checkpointB[0]) <= eventPlayer.checkpointB[1]
     
     if len(eventPlayer.tempCurrentOrb) > 0:
-        TeleportToCurrentCheckoint()
+        TeleportToCurrentCheckpoint()
         smallMessage(eventPlayer, Config[22])
         playEffect(eventPlayer, DynamicEffect.EXPLOSION_SOUND, null, eventPlayer, 100)
         return
     if eventPlayer.targetBot.isAlive():
-        TeleportToCurrentCheckoint()
+        TeleportToCurrentCheckpoint()
         smallMessage(eventPlayer, Config[33])
         playEffect(eventPlayer, DynamicEffect.EXPLOSION_SOUND, null, eventPlayer, 100)
         return
@@ -1137,8 +1142,8 @@ rule "Resurrection after death (Originally from peace's mercy parkour editor: T6
     @Event playerDied
     @Team 1
     @Condition eventPlayer.spectatorMode == false
-    
     #@Condition eventPlayer.isDummy() == false
+
     if not eventPlayer.finished and not eventPlayer.freeMode:
         if Hardcore == true:
             eventPlayer.teleport(Checkpoint[0][0])
@@ -1156,11 +1161,11 @@ rule "Resurrection after death (Originally from peace's mercy parkour editor: T6
             async(DisplayCurrentCustomSmallMsgs, AsyncBehavior.NOOP)
             playEffect(eventPlayer, DynamicEffect.TRACER_RECALL_REAPPEAR_SOUND, null, eventPlayer, 200)
             eventPlayer.segmentStart = 0
-        else:
+    else:
         eventPlayer.teleport(eventPlayer.checkpointA[0])
         eventPlayer.mistake += 1
         SetCurrentAbilities()
-        if eventPlayer.currentOrb:
+    if eventPlayer.currentOrb:
             TeleportCurrentBot()
     else:
         eventPlayer.teleport(nearestWalkablePosition(eventPlayer.getPosition()))
@@ -1188,7 +1193,7 @@ rule "back point after landing (Originally from peace's mercy parkour editor: T6
     @Condition distance(eventPlayer, eventPlayer.checkpointB[0]) > eventPlayer.checkpointB[1]
     @Condition eventPlayer.checkpoint in [-1, -1, -1] == false
     
-    TeleportToCurrentCheckoint()
+    TeleportToCurrentCheckpoint()
 
 
 rule "Ga usage restrictions (Originally from peace's mercy parkour editor: T6QQT)":
@@ -1213,7 +1218,7 @@ rule "Get orb (Originally from peace's mercy parkour editor: T6QQT)":
     @Condition (any([distance(eventPlayer, player[0]) <= 1.5 or distance(eventPlayer.getEyePosition(), player[0]) <= 1.5 for player in eventPlayer.tempCurrentOrb])) == true
     
     if eventPlayer.targetBot.isAlive() and not eventPlayer.freeMode and not eventPlayer.finished:
-        TeleportToCurrentCheckoint()
+        TeleportToCurrentCheckpoint()
         smallMessage(eventPlayer, Config[33])
         playEffect(eventPlayer, DynamicEffect.EXPLOSION_SOUND, null, eventPlayer, 100)
         return
@@ -1286,7 +1291,7 @@ rule "Back to point (Originally from peace's mercy parkour editor: T6QQT)":
     @Condition (eventPlayer.isHoldingButton(Button.ULTIMATE) or eventPlayer.isCommunicating(Comms.SPRAY_UP)) == true
     
     if not Hardcore and not eventPlayer.finished and not eventPlayer.freeMode and eventPlayer.isHoldingButton(Button.ULTIMATE):
-        TeleportToCurrentCheckoint()
+        TeleportToCurrentCheckpoint()
     elif EditMode and eventPlayer.isCommunicating(Comms.SPRAY_UP):
         CancelAbilityAndMomentum()
         eventPlayer.teleport(eventPlayer.checkpointA[0])
@@ -1315,7 +1320,7 @@ rule "Free mode (Originally from peace's mercy parkour editor: T6QQT)":
         eventPlayer.disallowButton(Button.SECONDARY_FIRE)
         CreatePlayerTargetBot()
         eventPlayer.setUltEnabled(false)
-        TeleportToCurrentCheckoint()
+        TeleportToCurrentCheckpoint()
         DisplayCurrentAbilityMsgs()
         if eventPlayer.isUsingUltimate():
             kill(eventPlayer, null)
@@ -1413,7 +1418,7 @@ rule "Obstacle Sphere effect (Originally from peace's mercy parkour editor: T6QQ
     
     if not eventPlayer.finished and not eventPlayer.freeMode:
         eventPlayer.setStatusEffect(null, Status.BURNING, 0.15)
-        TeleportToCurrentCheckoint()
+        TeleportToCurrentCheckpoint()
     else:
         eventPlayer.setStatusEffect(null, Status.BURNING, 9999)
         waitUntil(all([distance(eventPlayer, player[0]) > player[1] and distance(eventPlayer.getEyePosition(), player[0]) > player[1] for player in eventPlayer.currentSphere]), 9999)
@@ -1429,7 +1434,6 @@ rule "Elastic cloud effect (Originally from peace's mercy parkour editor: T6QQT)
     @Condition any([distance(eventPlayer, player[0]) <= 1.5 for player in eventPlayer.currentCloud]) == true
     
     eventPlayer.applyImpulse(Vector.UP, (([player for player in eventPlayer.currentCloud if distance(eventPlayer, player[0]) <= 1.5])[0])[1], Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
-    playEffect(eventPlayer, DynamicEffect.EXPLOSION_SOUND, null, eventPlayer, 80)
 
 
 rule "Player left match, destroy the player`s mercy (Originally from peace's mercy parkour editor: T6QQT)":
@@ -2093,6 +2097,7 @@ def CreateGlobalHUD():
         setObjectiveDescription(getAllPlayers(), "Elapsed time {0} minutes {1} seconds".format(floor(getTotalTimeElapsed() / 60), floor(getTotalTimeElapsed() % 60)), HudReeval.VISIBILITY_AND_STRING)
     else:
         hudSubheader(getAllPlayers(), "Elapsed time {0} minutes {1} seconds".format(floor(getTotalTimeElapsed() / 60), floor(getTotalTimeElapsed() % 60)), HudPosition.TOP, 0, rgba(248, 200, 220, 170), HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    createEffect(localPlayer if localPlayer.bhop else null, Effect.ANA_NANO_BOOSTED, null, localPlayer, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     hudSubtext(getAllPlayers(), "Widow Parkour {0} by {1}\nCode: {2}\nbased on HiyaXD's mod [J1ANR]\nof Peace's Mercy editor [T6QQT]".format(getCurrentMap(), CreatorAndCode[0] if CreatorAndCode[0] else "Anonymous", CreatorAndCode[1] if CreatorAndCode[1] else "Not yet"), HudPosition.LEFT, -999, Config[12], HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
     #this can be edited to taste
     hudSubtext(getAllPlayers(), "Youtube Guide: {0}\r\nMore Widow Parkour Maps: {1}\r\nDiscord: {2}".format("guide link here", "https://bit.ly/widowparkour", "discord.gg/yfybAmM7HA"), HudPosition.LEFT, -999, Config[12], HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
@@ -2165,8 +2170,8 @@ def CreatePlayerHUDAndEffects():
         hudSubtext(eventPlayer, "Mistakes: {0} Times\nTime: {1} Seconds".format("Not running!" if eventPlayer.cheat else eventPlayer.mistake, "Not running!" if eventPlayer.cheat else eventPlayer.time), HudPosition.RIGHT, 0, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
 
-def TeleportToCurrentCheckoint():
-    @Name "Subroutine TeleportToCurrentCheckoint (Originally from peace's mercy parkour editor: T6QQT)"
+def TeleportToCurrentCheckpoint():
+    @Name "Subroutine TeleportToCurrentCheckpoint (Originally from peace's mercy parkour editor: T6QQT)"
     
     CancelAbilityAndMomentum()
     eventPlayer.mistake += 1 if eventPlayer.checkpoint != 0 and not eventPlayer.freeMode and distance(eventPlayer, eventPlayer.checkpointA[0]) > eventPlayer.checkpointA[1] else 0
